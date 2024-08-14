@@ -263,20 +263,20 @@
                 $('#modalCarousel').carousel(index);
             });
 
-            // Xử lý zoom trên thiết bị di động
-            $('.modal-body img').on('dblclick', function () {
-                $(this).toggleClass('zoomed');
-            });
-
-            // Đảm bảo zoom hoạt động trên các thiết bị di động
-            $('.modal-body img').on('touchstart', function () {
-                var $this = $(this);
-                if ($this.hasClass('zoomed')) {
-                    $this.removeClass('zoomed');
-                } else {
-                    $this.addClass('zoomed');
-                }
-            });
+            // // Xử lý zoom trên thiết bị di động
+            // $('.modal-body img').on('dblclick', function () {
+            //     $(this).toggleClass('zoomed');
+            // });
+            //
+            // // Đảm bảo zoom hoạt động trên các thiết bị di động
+            // $('.modal-body img').on('touchstart', function () {
+            //     var $this = $(this);
+            //     if ($this.hasClass('zoomed')) {
+            //         $this.removeClass('zoomed');
+            //     } else {
+            //         $this.addClass('zoomed');
+            //     }
+            // });
         });
     </script>
 @stop
