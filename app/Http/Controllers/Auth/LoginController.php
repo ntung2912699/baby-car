@@ -51,7 +51,7 @@ class LoginController extends Controller
             $findUser = User::where('email', $facebookUser->email)->first();
             if ($findUser) {
                 Auth::login($findUser);
-                $token = $this->user->createToken('auth_token')->plainTextToken;
+                $token = Auth::user()->createToken('auth_token')->plainTextToken;
                 Session::put('jwt_token', $token);
                 return redirect($this->redirectTo);
             } else {
@@ -66,7 +66,7 @@ class LoginController extends Controller
                 ]);
 
                 Auth::login($newUser);
-                $token = $this->user->createToken('auth_token')->plainTextToken;
+                $token = Auth::user()->createToken('auth_token')->plainTextToken;
                 Session::put('jwt_token', $token);
                 return redirect($this->redirectTo);
             }
@@ -88,7 +88,7 @@ class LoginController extends Controller
 
             if ($findUser) {
                 Auth::login($findUser);
-                $token = $this->user->createToken('auth_token')->plainTextToken;
+                $token = Auth::user()->createToken('auth_token')->plainTextToken;
                 Session::put('jwt_token', $token);
                 return redirect($this->redirectTo);
             } else {
@@ -100,7 +100,7 @@ class LoginController extends Controller
                 ]);
 
                 Auth::login($newUser);
-                $token = $this->user->createToken('auth_token')->plainTextToken;
+                $token = Auth::user()->createToken('auth_token')->plainTextToken;
                 Session::put('jwt_token', $token);
                 return redirect($this->redirectTo);
             }

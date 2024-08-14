@@ -7,6 +7,31 @@
             overflow: hidden; /* Ẩn phần văn bản bị tràn ra ngoài */
             text-overflow: ellipsis; /* Thêm dấu chấm ba để chỉ ra rằng văn bản đã bị cắt */
         }
+
+        @media (max-width: 768px) {
+            /* Đặt màu sắc của văn bản trong thanh điều hướng thành màu đen */
+            #ftco-navbar .navbar-nav .nav-link {
+                color: #000000 !important; /* Màu đen */
+            }
+
+            #ftco-navbar .navbar-nav .nav-link:hover {
+                color: #333333 !important; /* Màu xám tối hơn khi di chuột qua */
+            }
+
+            .ftco-navbar-light {
+                top: 0px !important;
+            }
+
+            /* Thêm box-shadow cho toàn bộ thanh điều hướng */
+            #ftco-navbar {
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng đổ bóng dưới thanh điều hướng */
+            }
+
+            .ftco-navbar-light .navbar-brand {
+                color: black !important;
+            }
+        }
+
     </style>
     <section class="hero-wrap hero-wrap-2 js-fullheight"
              style="background-image: url('{{asset('assets/client/images/bg_3.jpg')}}');"
@@ -23,7 +48,7 @@
             </div>
         </div>
     </section>
-
+{{ var_dump(session('jwt_token')) }}
     <section class="ftco-section bg-light">
         <div class="container">
             <div class="row justify-content-center">
