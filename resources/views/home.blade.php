@@ -48,7 +48,6 @@
             </div>
         </div>
     </section>
-{{ var_dump(session('jwt_token')) }}
     <section class="ftco-section bg-light">
         <div class="container">
             <div class="row justify-content-center">
