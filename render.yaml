@@ -3,6 +3,8 @@ services:
   - type: web
     name: nice-car
     buildCommand: |
+      curl -sS https://getcomposer.org/installer -o composer-setup.php
+      php composer-setup.php --install-dir=/usr/local/bin --filename=composer
       curl -sS https://getcomposer.org/installer | php
       php composer.phar install --optimize-autoloader --no-dev
       npm install
