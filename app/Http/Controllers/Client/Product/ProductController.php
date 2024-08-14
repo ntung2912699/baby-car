@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client\Product;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\ProductModel;
 use App\Repositories\Attribute\AttributeRepository;
 use App\Repositories\Category\CategoryRepository;
@@ -100,12 +101,14 @@ class ProductController extends Controller
             $categories = $this->categoryRepository->getAll();
             $producers = $this->producerRepository->getAll();
             $attributes = $this->attributeRepository->getAll();
+            $productModels = $this->productModelRepository->getAll();
             return view('client.page.product-list', compact(
                 'products',
                 'query',
                 'categories',
                 'producers',
-                'attributes'
+                'attributes',
+                'productModels'
             ));
         } catch (\Exception $exception) {
             return view('client.page.not-found');
@@ -123,6 +126,7 @@ class ProductController extends Controller
             $categories = $this->categoryRepository->getAll();
             $producers = $this->producerRepository->getAll();
             $attributes = $this->attributeRepository->getAll();
+            $productModels = $this->productModelRepository->getAll();
             $producerTargetId = $id;
             return view('client.page.product-list', compact(
                 'products',
@@ -130,7 +134,8 @@ class ProductController extends Controller
                 'categories',
                 'producers',
                 'attributes',
-                'producerTargetId'
+                'producerTargetId',
+                'productModels'
             ));
         } catch (\Exception $exception) {
             return view('client.page.not-found');
@@ -142,15 +147,17 @@ class ProductController extends Controller
      */
     public function productList() {
         try {
-            $products = $this->productRepository->orderBy('created_at', 'asc')->paginate(12);
+            $products = Product::query()->where('status_id', '=', 1)->orderBy('created_at', 'asc')->paginate(12);
             $categories = $this->categoryRepository->getAll();
             $producers = $this->producerRepository->getAll();
             $attributes = $this->attributeRepository->getAll();
+            $productModels = $this->productModelRepository->getAll();
             return view('client.page.product-list', compact(
                 'products',
                 'categories',
                 'producers',
-                'attributes'
+                'attributes',
+                'productModels'
             ));
         } catch (\Exception $exception) {
             return view('client.page.not-found');
@@ -181,7 +188,7 @@ class ProductController extends Controller
             $producers = $this->producerRepository->getAll();
             $models = ProductModel::query()->where('producer_id', '=', $request->input('producer'));
             $attributes = $this->attributeRepository->getAll();
-
+            $productModels = $this->productModelRepository->getAll();
             // Trả về view với dữ liệu
             return view('client.page.product-list', [
                 'products' => $products,
@@ -198,7 +205,8 @@ class ProductController extends Controller
                 'price_range_max' => $filters['price_range_max'],
                 'start_year' => $filters['start_year'],
                 'end_year' => $filters['end_year'],
-                'spec' => $filters['spec']
+                'spec' => $filters['spec'],
+                'productModels' => $productModels
             ]);
         } catch (\Exception $exception) {
             return view('client.page.not-found');

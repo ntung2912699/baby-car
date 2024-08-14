@@ -55,7 +55,7 @@ class HomeController extends Controller
     public function index()
     {
         try {
-            $products = $this->productRepository->orderBy('created_at', 'asc')->paginate(20);
+            $products = Product::query()->where('status_id', '=', 1)->orderBy('created_at', 'ASC')->paginate(12);
             $producers = $this->producerRepository->getAll();
             $countProduct = $this->productRepository->countTotal();
             $countUser = $this->userRepository->countTotal();
@@ -71,5 +71,9 @@ class HomeController extends Controller
         } catch (\Exception $exception) {
             return view('client.page.not-found');
         }
+    }
+
+    public function contact() {
+        return view('client.page.contact');
     }
 }

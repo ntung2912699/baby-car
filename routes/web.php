@@ -37,4 +37,5 @@ Route::get('/product-by-producer/{id}', [\App\Http\Controllers\Client\Product\Pr
 Route::post('/search', [\App\Http\Controllers\Client\Product\ProductController::class, 'search'])->name('search');
 Route::post('/product-search', [\App\Http\Controllers\Client\Product\ProductController::class, 'productSearch'])->name('product.search');
 Route::get('/product-list', [\App\Http\Controllers\Client\Product\ProductController::class, 'productList'])->name('product.list');
+Route::get('/contact', [\App\Http\Controllers\HomeController::class, 'contact'])->name('contact');
 

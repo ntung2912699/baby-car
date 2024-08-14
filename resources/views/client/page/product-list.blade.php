@@ -186,6 +186,11 @@
                                 <label for="model">{{ __('Dòng Xe') }}</label>
                                 <select id="model" name="model" disabled class="form-control">
                                     <option value="">{{ __('Tất Cả') }}</option>
+{{--                                    @foreach($productModels as $model)--}}
+{{--                                        <option value="{{ $model->id }}" {{ request()->input('model') == $model->id ? 'selected' : '' }}>--}}
+{{--                                            {{ $model->name }}--}}
+{{--                                        </option>--}}
+{{--                                    @endforeach--}}
                                 </select>
                             </div>
                         </div>

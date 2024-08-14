@@ -53,6 +53,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         return $this->model
             ->where('name', 'like', '%' . $query . '%')
+            ->where('status_id', '=', 1)
             ->orWhere('description', 'like', '%' . $query . '%')
             ->orWhere('price', 'like', '%' . $query . '%')
             ->orderBy('created_at', 'desc') // Sắp xếp kết quả theo ngày tạo, mới nhất trước
@@ -67,6 +68,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         return $this->model
             ->where('producer_id', '=', $id)
+            ->where('status_id', '=', 1)
             ->paginate(12);
     }
 
@@ -127,6 +129,8 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                 $subQuery->whereIn('attribute_spec.id', $filters['spec']);
             });
         }
+
+        $query->where('status_id', '=', 1);
 
         return $query->paginate(12);
     }

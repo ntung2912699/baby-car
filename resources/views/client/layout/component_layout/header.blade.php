@@ -59,11 +59,9 @@
 
         <div class="collapse navbar-collapse" id="ftco-nav">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active"><a href="{{ url('/') }}" class="nav-link">{{ __('Trang Chủ') }}</a></li>
-                <li class="nav-item"><a href="{{ url('/#') }}" class="nav-link">{{ __('Về Chúng Tôi') }}</a></li>
-                <li class="nav-item"><a href="{{ url('/#') }}" class="nav-link">{{ __('Dịch Vụ') }}</a></li>
+                <li class="nav-item"><a href="{{ url('/') }}" class="nav-link">{{ __('Trang Chủ') }}</a></li>
                 <li class="nav-item"><a href="{{ route('product.list') }}" class="nav-link">{{ __('Tìm Xe') }}</a></li>
-                <li class="nav-item"><a href="{{ url('/#') }}" class="nav-link">{{ __('Liên Hệ') }}</a></li>
+                <li class="nav-item"><a href="{{ route('contact') }}" class="nav-link">{{ __('Liên Hệ') }}</a></li>
 
                 <!-- Biểu tượng tìm kiếm -->
                 <li class="nav-item">
