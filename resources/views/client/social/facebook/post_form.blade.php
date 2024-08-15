@@ -186,7 +186,7 @@
                 @foreach($productList as $product)
                     <div>
                         <input type="checkbox" name="products[]" value="{{ $product->id }}" id="product-{{ $product->id }}">
-                        <label for="product-{{ $product->id }}" class="product-name" data-product-id="{{ $product->id }}">{{ $product->name }}</label>
+                        <label class="product-name" data-product-id="{{ $product->id }}">{{ $product->name }}</label>
                         <img src="{{ $product->thumbnail }}" alt="Thumbnail" class="thumbnail">
                     </div>
                 @endforeach
