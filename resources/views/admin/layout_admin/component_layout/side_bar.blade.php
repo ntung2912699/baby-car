@@ -4,12 +4,13 @@
         <!-- Logo Header -->
         <div class="logo-header" data-background-color="dark">
             <a href="{{ route('admin.index') }}" class="logo">
-                <img
-                    src="{{ asset('assets/img/kaiadmin/logo_light.svg') }}"
-                    alt="navbar brand"
-                    class="navbar-brand"
-                    height="20"
-                />
+{{--                <img--}}
+{{--                    src="{{ asset('assets/img/kaiadmin/logo_light.svg') }}"--}}
+{{--                    alt="navbar brand"--}}
+{{--                    class="navbar-brand"--}}
+{{--                    height="20"--}}
+
+               <h1 class="navbar-brand" style="color: #FFFFFF"><img src="{{ asset('assets/img/kaiadmin/favicon.ico') }}"/> NICE CAR ADMIN</h1>
             </a>
             <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
@@ -90,65 +91,65 @@
                     <div class="collapse" id="sidebarLayouts">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="#">
+                                <a href="{{ route('facebook.integration-post') }}">
                                     <span class="sub-item">{{ trans('Facebook') }}</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="#">
-                                    <span class="sub-item">{{ trans('Tiktok') }}</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="sub-item">{{ trans('Youtobe') }}</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <span class="sub-item">{{ trans('Google') }}</span>
-                                </a>
-                            </li>
+{{--                            <li>--}}
+{{--                                <a href="#">--}}
+{{--                                    <span class="sub-item">{{ trans('Tiktok') }}</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                            <li>--}}
+{{--                                <a href="#">--}}
+{{--                                    <span class="sub-item">{{ trans('Youtobe') }}</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                            <li>--}}
+{{--                                <a href="#">--}}
+{{--                                    <span class="sub-item">{{ trans('Google') }}</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
                         </ul>
                     </div>
                 </li>
-                <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#forms">
-                        <i class="fas fa-cogs"></i>
-                        <p>{{ trans('Cài Đặt') }}</p>
-                        <span class="caret"></span>
-                    </a>
-                    <div class="collapse" id="forms">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="forms/forms.html">
-                                    <span class="sub-item">Basic Form</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#tables">
-                        <i class="fas fa-coins"></i>
-                        <p>{{ trans('Dịch Vụ') }}</p>
-                        <span class="caret"></span>
-                    </a>
-                    <div class="collapse" id="tables">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="tables/tables.html">
-                                    <span class="sub-item">Basic Table</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="tables/datatables.html">
-                                    <span class="sub-item">Datatables</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
+{{--                <li class="nav-item">--}}
+{{--                    <a data-bs-toggle="collapse" href="#forms">--}}
+{{--                        <i class="fas fa-cogs"></i>--}}
+{{--                        <p>{{ trans('Cài Đặt') }}</p>--}}
+{{--                        <span class="caret"></span>--}}
+{{--                    </a>--}}
+{{--                    <div class="collapse" id="forms">--}}
+{{--                        <ul class="nav nav-collapse">--}}
+{{--                            <li>--}}
+{{--                                <a href="forms/forms.html">--}}
+{{--                                    <span class="sub-item">Basic Form</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                        </ul>--}}
+{{--                    </div>--}}
+{{--                </li>--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a data-bs-toggle="collapse" href="#tables">--}}
+{{--                        <i class="fas fa-coins"></i>--}}
+{{--                        <p>{{ trans('Dịch Vụ') }}</p>--}}
+{{--                        <span class="caret"></span>--}}
+{{--                    </a>--}}
+{{--                    <div class="collapse" id="tables">--}}
+{{--                        <ul class="nav nav-collapse">--}}
+{{--                            <li>--}}
+{{--                                <a href="tables/tables.html">--}}
+{{--                                    <span class="sub-item">Basic Table</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                            <li>--}}
+{{--                                <a href="tables/datatables.html">--}}
+{{--                                    <span class="sub-item">Datatables</span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                        </ul>--}}
+{{--                    </div>--}}
+{{--                </li>--}}
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#maps">
                         <i class="fas fa-info-circle"></i>
@@ -158,13 +159,8 @@
                     <div class="collapse" id="maps">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="maps/googlemaps.html">
-                                    <span class="sub-item">Google Maps</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="maps/jsvectormap.html">
-                                    <span class="sub-item">Jsvectormap</span>
+                                <a>
+                                    <span class="sub-item">Version 1.0.1</span>
                                 </a>
                             </li>
                         </ul>

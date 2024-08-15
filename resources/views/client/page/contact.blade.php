@@ -110,6 +110,8 @@
             .modal-dialog {
                 margin-top: 10vh; /* Thêm khoảng cách trên cho thiết bị di động */
             }
+
+            ackground-color:
         }
 
         @media (min-width: 769px) {

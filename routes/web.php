@@ -16,6 +16,10 @@ Route::middleware(['check-admin-login'])->group(function () {
     Route::get('/admin/product/form-create', [\App\Http\Controllers\Admin\Product\ProductController::class, 'create'])->name('product-form.create');
     Route::get('/admin/product/form-edit/{id}', [\App\Http\Controllers\Admin\Product\ProductController::class, 'edit'])->name('product-form.edit');
     Route::get('/admin/user/index', [\App\Http\Controllers\Admin\User\UserController::class, 'index'])->name('user.index');
+
+    Route::get('/admin/facebook-integration-post', [\App\Http\Controllers\Social\FacebookApp\FacebookIntegrationController::class, 'index'])->name('facebook.integration-post');
+    Route::post('/admin/facebook-post-publish', [\App\Http\Controllers\Social\FacebookApp\FacebookIntegrationController::class, 'postToFacebook'])->name('facebook.post-publish');
+    Route::get('/admin/facebook-products/{id}', [\App\Http\Controllers\Social\FacebookApp\FacebookIntegrationController::class, 'show'])->name('facebook-show-product');
 });
 
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -38,4 +42,3 @@ Route::post('/search', [\App\Http\Controllers\Client\Product\ProductController::
 Route::post('/product-search', [\App\Http\Controllers\Client\Product\ProductController::class, 'productSearch'])->name('product.search');
 Route::get('/product-list', [\App\Http\Controllers\Client\Product\ProductController::class, 'productList'])->name('product.list');
 Route::get('/contact', [\App\Http\Controllers\HomeController::class, 'contact'])->name('contact');
-

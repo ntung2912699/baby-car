@@ -49,6 +49,18 @@
         border-color: #004085; /* Màu viền của nút khi di chuột qua */
     }
 
+    .login-btn-nav {
+        background-color: #01d28e;
+        color: #FFFFFF
+    }
+
+    @media (max-width: 768px) {
+        .login-btn-nav {
+            background-color: #FFFFFF;
+            color: #181818;
+        }
+    }
+
 </style>
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
@@ -87,7 +99,7 @@
                     </li>
                 @else
                     <li class="nav-item">
-                        <a href="{{ route('login') }}" class="nav-link btn" style="background-color: #01d28e; color: #FFFFFF">Đăng Nhập</a>
+                        <a href="{{ route('login') }}" class="nav-link btn login-btn-nav">Đăng Nhập</a>
                     </li>
                 @endauth
             </ul>
