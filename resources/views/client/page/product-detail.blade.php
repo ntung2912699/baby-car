@@ -218,9 +218,9 @@
     <!-- Modal -->
     <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
+            <span class="close-icon" data-dismiss="modal" aria-label="Close">&times;</span>
             <div class="modal-content">
                 <div class="modal-body">
-                    <span class="close-icon" data-dismiss="modal" aria-label="Close">&times;</span>
                     <div id="modalCarousel" class="carousel slide" data-ride="carousel">
                         <ol class="carousel-indicators">
                             <li data-target="#modalCarousel" data-slide-to="0" class="active"></li>
