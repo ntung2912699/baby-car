@@ -98,55 +98,11 @@
             background-color: #165c9d;
         }
 
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0,0,0);
-            background-color: rgba(0,0,0,0.4);
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 600px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
         .modal-image {
             width: 100%;
             max-height: 300px;
             object-fit: cover;
             border-radius: 8px;
-        }
-
-        #productDetailModal {
-            z-index: 10;
-            padding-top: 0px;
         }
     </style>
 
@@ -199,45 +155,58 @@
     </div>
 
     <!-- Modal -->
-    <div id="productDetailModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 id="productName"></h2>
-            <img id="productImage" src="" alt="Product Image" class="modal-image">
-            <p id="productDescription"></p>
+    <div class="modal fade" id="productDetailModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productName"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="productImage" src="" alt="Product Image" class="modal-image">
+                    <p id="productDescription"></p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var modal = document.getElementById("productDetailModal");
-            var span = document.getElementsByClassName("close")[0];
+            // Initialize the modal
+            var modalElement = document.getElementById('productDetailModal');
+            var modal = new bootstrap.Modal(modalElement, {
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            var loadingElement = document.getElementById('loading');
 
             document.querySelectorAll('.product-name').forEach(function(element) {
                 element.addEventListener('click', function() {
                     var productId = this.getAttribute('data-product-id');
 
-                    // Fetch product details via AJAX or set them manually if available
+                    // Hiển thị thông báo loading
+                    loadingElement.style.display = 'block';
+
+                    // Fetch product details via AJAX
                     fetch('facebook-products/' + productId) // Assuming you have a route to get product details
                         .then(response => response.json())
                         .then(data => {
                             document.getElementById('productName').innerText = data.name;
                             document.getElementById('productImage').src = data.thumbnail;
                             document.getElementById('productDescription').innerText = data.description;
-                            modal.style.display = "block";
+
+                            // Ẩn thông báo loading và hiển thị modal
+                            loadingElement.style.display = 'none';
+                            modal.show();
+                        })
+                        .catch(error => {
+                            // Nếu có lỗi, ẩn thông báo loading và có thể thông báo lỗi
+                            loadingElement.style.display = 'none';
+                            console.error('Error fetching product details:', error);
                         });
                 });
             });
-
-            span.onclick = function() {
-                modal.style.display = "none";
-            }
-
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            }
         });
     </script>
 @stop

@@ -19,6 +19,9 @@
             },
         }).then((Delete) => {
             if (Delete) {
+                var loadingElement = document.getElementById('loading');
+                // Hiển thị thông báo loading
+                loadingElement.style.display = 'block';
                 $.ajax({
                     url: "{{ route('api.product-delete') }}",
                     type: "post",
@@ -29,6 +32,8 @@
                         id: id,
                     } ,
                     success: function (response) {
+                        // Hiển thị thông báo loading
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Deleted!') }}!", "{{ trans('Thành Công !') }}", {
                             icon: "success",
                             buttons: {
@@ -42,6 +47,8 @@
                         }, 1000);
                     },
                     error: function(response) {
+                        // Hiển thị thông báo loading
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Error!') }}!", response.responseJSON.message, {
                             icon: "error",
                             buttons: {

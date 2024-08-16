@@ -34,6 +34,41 @@
 {{--    @include('admin.layout_admin.component_layout.custom_template')--}}
     <!-- End Custom template -->
 </div>
+<style>
+    /* Thông báo loading */
+    #loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Nền tối để làm nổi bật thông báo loading */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1050; /* Đảm bảo thông báo loading nằm trên các phần tử khác */
+    }
+
+    .loading-overlay {
+        text-align: center;
+    }
+
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        border-width: 0.4em;
+        border-color: rgba(255, 255, 255, 0.7) transparent rgba(255, 255, 255, 0.7) transparent;
+    }
+</style>
+<!-- Thông báo loading -->
+<div id="loading" style="display: none;">
+    <div class="loading-overlay" style="padding-top: 20%">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</div>
+
 <!--   Core JS Files   -->
 @include('admin.layout_admin.component_layout.script_import')
 <script>

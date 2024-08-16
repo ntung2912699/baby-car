@@ -115,6 +115,9 @@
         form_data.append('description', descriptionData);
         form_data.append('spec', specIdArr);
 
+        var loadingElement = document.getElementById('loading');
+        // Hiển thị thông báo loading
+        loadingElement.style.display = 'block';
         $.ajax({
             type: form.attr('method'),
             url: form.attr('action'),
@@ -126,6 +129,7 @@
             processData: false,
             data: form_data,
             success: function (response) {
+                loadingElement.style.display = 'none';
                 swal("{{ trans('Success') }}!", "{{ trans('Thành Công !') }}", {
                     icon: "success",
                     buttons: {
@@ -139,6 +143,7 @@
                 }, 1500);
             },
             error: function(response) {
+                loadingElement.style.display = 'none';
                 swal("{{ trans('Error') }}!", response.responseJSON.message, {
                     icon: "error",
                     buttons: {
@@ -179,6 +184,9 @@
     };
 
     $(document).ready(function() {
+        var loadingElement = document.getElementById('loading');
+        // Hiển thị thông báo loading
+        loadingElement.style.display = 'block';
         $.ajax({
             url: "{{ route('api.get-attribute') }}",
             type: "GET",
@@ -189,6 +197,7 @@
             contentType: false,
             processData: false,
             success: function (response) {
+                loadingElement.style.display = 'none';
                 const data = response.data;
                 if (data.attributes) {
                     buildAttributeForm(data.attributes);
@@ -204,6 +213,7 @@
                 }
             },
             error: function(response) {
+                loadingElement.style.display = 'none';
                 swal("{{ trans('Error') }}!", "{{ __('Tải Tính Năng Sản Phẩm Thất Bại, Vui Lòng Thử Lại') }}", {
                     icon: "error",
                     buttons: {
@@ -219,6 +229,9 @@
     function producerChange() {
         var producerId = $(this).val();
         if (producerId) {
+            var loadingElement = document.getElementById('loading');
+            // Hiển thị thông báo loading
+            loadingElement.style.display = 'block';
             var url = '{{ route("model.get-by-producer", ["producerId" => "__producerId__"]) }}';
             url = url.replace('__producerId__', producerId);
             $.ajax({
@@ -229,10 +242,12 @@
                 },
                 cache: false,
                 success: function(data) {
+                    loadingElement.style.display = 'none';
                     $('#modelSelectContent').removeAttr('hidden');
                     buildModelForm(data.data.models, data.data.producers, producerId)
                 },
                 error: function(response) {
+                    loadingElement.style.display = 'none';
                     $('#modelSelectContent').attr('hidden','hidden');
                     swal("{{ trans('Error') }}!", "{{ __('Tải Dòng Xe Thất Bại, Vui Lòng Thử Lại') }}", {
                         icon: "error",
@@ -527,6 +542,9 @@
         }).then((Submit) => {
             var nameData = $("#input-field").val();
             if (Submit && nameData) {
+                var loadingElement = document.getElementById('loading');
+                // Hiển thị thông báo loading
+                loadingElement.style.display = 'block';
                 $.ajax({
                     url: "{{ route('status.store') }}",
                     type: "post",
@@ -537,6 +555,7 @@
                         name: nameData
                     } ,
                     success: function (response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Success') }}!", "{{ trans('Thành Công !') }}", {
                             icon: "success",
                             buttons: {
@@ -548,6 +567,7 @@
                         buildStatusForm(response.data);
                     },
                     error: function(response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Error') }}!", response.responseJSON.message, {
                             icon: "error",
                             buttons: {
@@ -674,6 +694,9 @@
             var file_data = $('#upload-field').prop('files')[0];
             var name_data = $('#name-category').val();
             if (Submit && file_data) {
+                var loadingElement = document.getElementById('loading');
+                // Hiển thị thông báo loading
+                loadingElement.style.display = 'block';
                 var form_data = new FormData();
                 form_data.append('logo', file_data);
                 form_data.append('name', name_data);
@@ -688,6 +711,7 @@
                     processData: false,
                     data: form_data,
                     success: function (response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Success') }}!", "{{ trans('Thành Công !') }}", {
                             icon: "success",
                             buttons: {
@@ -699,6 +723,7 @@
                         buildCategoryForm(response.data);
                     },
                     error: function(response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Error') }}!", response.responseJSON.message, {
                             icon: "error",
                             buttons: {
@@ -818,13 +843,16 @@
                 },
                 cancel: {
                     visible: true,
-                    className: "btn btn-danger",
+                    className: "btn btn-secondary",
                 },
             },
         }).then((Submit) => {
             var file_data = $('#upload-field').prop('files')[0];
             var name_data = $('#name-producer').val();
             if (Submit && file_data) {
+                var loadingElement = document.getElementById('loading');
+                // Hiển thị thông báo loading
+                loadingElement.style.display = 'block';
                 var form_data = new FormData();
                 form_data.append('logo', file_data);
                 form_data.append('name', name_data);
@@ -839,6 +867,7 @@
                     processData: false,
                     data: form_data,
                     success: function (response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Success') }}!", "{{ trans('Thành Công !') }}", {
                             icon: "success",
                             buttons: {
@@ -850,6 +879,7 @@
                         buildProducerForm(response.data);
                     },
                     error: function(response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Error') }}!", response.responseJSON.message, {
                             icon: "error",
                             buttons: {
@@ -930,6 +960,9 @@
             var producer_data = $('#producer-id').val();
             var name_data = $('#name-model').val();
             if (Submit && producer_data) {
+                var loadingElement = document.getElementById('loading');
+                // Hiển thị thông báo loading
+                loadingElement.style.display = 'block';
                 var form_data = new FormData();
                 form_data.append('producer_id', producer_data);
                 form_data.append('name', name_data);
@@ -944,6 +977,7 @@
                     processData: false,
                     data: form_data,
                     success: function (response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Success') }}!", "{{ trans('Thành Công !') }}", {
                             icon: "success",
                             buttons: {
@@ -955,6 +989,7 @@
                         buildModelForm(response.data.models,response.data.producers, producerId);
                     },
                     error: function(response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Error') }}!", response.responseJSON.message, {
                             icon: "error",
                             buttons: {
@@ -1001,6 +1036,9 @@
         }).then((Submit) => {
             var nameData = $("#input-field").val();
             if (Submit && nameData) {
+                var loadingElement = document.getElementById('loading');
+                // Hiển thị thông báo loading
+                loadingElement.style.display = 'block';
                 $.ajax({
                     url: "{{ route('attribute.store') }}",
                     type: "post",
@@ -1011,6 +1049,7 @@
                         name: nameData
                     } ,
                     success: function (response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Success') }}!", "{{ trans('Thành Công !') }}", {
                             icon: "success",
                             buttons: {
@@ -1022,6 +1061,7 @@
                         buildAttributeForm(response.data)
                     },
                     error: function(response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Error') }}!", response.responseJSON.message, {
                             icon: "error",
                             buttons: {
@@ -1068,6 +1108,9 @@
         }).then((Submit) => {
             var nameData = $("#input-field").val();
             if (Submit && nameData) {
+                var loadingElement = document.getElementById('loading');
+                // Hiển thị thông báo loading
+                loadingElement.style.display = 'block';
                 $.ajax({
                     url: "{{ route('attribute-spec.store') }}",
                     type: "post",
@@ -1079,6 +1122,7 @@
                         value: nameData
                     } ,
                     success: function (response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Success') }}!", "{{ trans('Thành Công !') }}", {
                             icon: "success",
                             buttons: {
@@ -1129,6 +1173,7 @@
                         $(targetElm)[0].appendChild(btnAddSpec);
                     },
                     error: function(response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Error') }}!", response.responseJSON.message, {
                             icon: "error",
                             buttons: {

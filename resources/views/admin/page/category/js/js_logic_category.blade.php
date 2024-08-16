@@ -28,6 +28,9 @@
         form_data.append('name', name_data);
         form_data.append('logo', file_data);
 
+        var loadingElement = document.getElementById('loading');
+        // Hiển thị thông báo loading
+        loadingElement.style.display = 'block';
         $.ajax({
             type: form.attr('method'),
             url: form.attr('action'),
@@ -39,6 +42,7 @@
             processData: false,
             data: form_data,
             success: function (response) {
+                loadingElement.style.display = 'none';
                 swal("{{ trans('Success') }}!", "{{ trans('Thành Công !') }}", {
                     icon: "success",
                     buttons: {
@@ -52,6 +56,7 @@
                 }, 1500);
             },
             error: function(response) {
+                loadingElement.style.display = 'none';
                 swal("{{ trans('Error') }}!", response.responseJSON.message, {
                     icon: "error",
                     buttons: {
@@ -93,6 +98,9 @@
         }).then((Submit) => {
             var nameData = $("#input-field").val();
             if (Submit && nameData) {
+                var loadingElement = document.getElementById('loading');
+                // Hiển thị thông báo loading
+                loadingElement.style.display = 'block';
                 $.ajax({
                     url: "{{ asset('api/admin/category/update_name') }}",
                     type: "post",
@@ -104,6 +112,7 @@
                         name: nameData
                     } ,
                     success: function (response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Success') }}!", "{{ trans('Thành Công !') }}", {
                             icon: "success",
                             buttons: {
@@ -117,6 +126,7 @@
                         }, 1500);
                     },
                     error: function(response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Error') }}!", response.responseJSON.message, {
                             icon: "error",
                             buttons: {
@@ -224,6 +234,9 @@
         }).then((Submit) => {
             var file_data = $('#upload-field').prop('files')[0];
             if (Submit && file_data) {
+                var loadingElement = document.getElementById('loading');
+                // Hiển thị thông báo loading
+                loadingElement.style.display = 'block';
                 var form_data = new FormData();
                 form_data.append('id', id);
                 form_data.append('logo', file_data);
@@ -238,6 +251,7 @@
                     processData: false,
                     data: form_data,
                     success: function (response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Success') }}!", "{{ trans('Thành Công !') }}", {
                             icon: "success",
                             buttons: {
@@ -251,6 +265,7 @@
                         }, 1500);
                     },
                     error: function(response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Error') }}!", response.responseJSON.message, {
                             icon: "error",
                             buttons: {
@@ -285,6 +300,9 @@
             },
         }).then((Delete) => {
             if (Delete) {
+                var loadingElement = document.getElementById('loading');
+                // Hiển thị thông báo loading
+                loadingElement.style.display = 'block';
                 $.ajax({
                     url: "{{ asset('api/admin/category/delete') }}",
                     type: "post",
@@ -295,6 +313,7 @@
                         id: id,
                     } ,
                     success: function (response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Deleted!') }}!", "{{ trans('Thành Công !') }}", {
                             icon: "success",
                             buttons: {
@@ -308,6 +327,7 @@
                         }, 1000);
                     },
                     error: function(response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Error!') }}!", response.responseJSON.message, {
                             icon: "error",
                             buttons: {

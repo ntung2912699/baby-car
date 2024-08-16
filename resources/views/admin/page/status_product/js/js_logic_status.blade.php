@@ -17,7 +17,9 @@
 
         var form_data = new FormData();
         form_data.append('name', name_data);
-
+        var loadingElement = document.getElementById('loading');
+        // Hiển thị thông báo loading
+        loadingElement.style.display = 'block';
         $.ajax({
             type: form.attr('method'),
             url: form.attr('action'),
@@ -29,6 +31,7 @@
             processData: false,
             data: form_data,
             success: function (response) {
+                loadingElement.style.display = 'none';
                 swal("{{ trans('Success') }}!", "{{ trans('Thành Công !') }}", {
                     icon: "success",
                     buttons: {
@@ -42,6 +45,7 @@
                 }, 1500);
             },
             error: function(response) {
+                loadingElement.style.display = 'none';
                 swal("{{ trans('Error') }}!", response.responseJSON.message, {
                     icon: "error",
                     buttons: {
@@ -83,6 +87,9 @@
         }).then((Submit) => {
             var nameData = $("#input-field").val();
             if (Submit && nameData) {
+                var loadingElement = document.getElementById('loading');
+                // Hiển thị thông báo loading
+                loadingElement.style.display = 'block';
                 $.ajax({
                     url: "{{ route('status.update') }}",
                     type: "post",
@@ -94,6 +101,7 @@
                         name: nameData
                     } ,
                     success: function (response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Success') }}!", "{{ trans('Thành Công !') }}", {
                             icon: "success",
                             buttons: {
@@ -107,6 +115,7 @@
                         }, 1500);
                     },
                     error: function(response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Error') }}!", response.responseJSON.message, {
                             icon: "error",
                             buttons: {
@@ -141,6 +150,9 @@
             },
         }).then((Delete) => {
             if (Delete) {
+                var loadingElement = document.getElementById('loading');
+                // Hiển thị thông báo loading
+                loadingElement.style.display = 'block';
                 $.ajax({
                     url: "{{ route('status.delete') }}",
                     type: "post",
@@ -151,6 +163,7 @@
                         id: id,
                     } ,
                     success: function (response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Deleted!') }}!", "{{ trans('Thành Công !') }}", {
                             icon: "success",
                             buttons: {
@@ -164,6 +177,7 @@
                         }, 1000);
                     },
                     error: function(response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Error!') }}!", response.responseJSON.message, {
                             icon: "error",
                             buttons: {

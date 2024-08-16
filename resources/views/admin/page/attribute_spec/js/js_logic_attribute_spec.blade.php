@@ -3,6 +3,7 @@
     const accessToken = '{{ session('jwt_token') }}';
     $("#add-spec-post-form").submit(function (e) {
         e.preventDefault();
+
         var form = $("#add-spec-post-form");
         var option_id_data = $('#optionSelect').val();
         var value_data = $('#attribute-spec-value').val();
@@ -19,6 +20,9 @@
         form_data.append('attribute_id', option_id_data);
         form_data.append('value', value_data);
 
+        var loadingElement = document.getElementById('loading');
+        // Hiển thị thông báo loading
+        loadingElement.style.display = 'block';
         $.ajax({
             type: form.attr('method'),
             url: form.attr('action'),
@@ -30,6 +34,8 @@
             processData: false,
             data: form_data,
             success: function (response) {
+                // Ẩn thông báo loading và hiển thị modal
+                loadingElement.style.display = 'none';
                 swal("{{ trans('Success') }}!", "{{ trans('Thành Công !') }}", {
                     icon: "success",
                     buttons: {
@@ -43,6 +49,8 @@
                 }, 1500);
             },
             error: function(response) {
+                // Ẩn thông báo loading và hiển thị modal
+                loadingElement.style.display = 'none';
                 swal("{{ trans('Error') }}!", response.responseJSON.message, {
                     icon: "error",
                     buttons: {
@@ -120,6 +128,9 @@
             var attrIdData = $("#optionEditSelect").val();
             var valueData = $("#attribute-spec-value-edit").val();
             if (Submit && attrIdData || Submit && valueData) {
+                var loadingElement = document.getElementById('loading');
+                // Hiển thị thông báo loading
+                loadingElement.style.display = 'block';
                 $.ajax({
                     url: "{{ asset('api/admin/spec/update') }}",
                     type: "post",
@@ -132,6 +143,7 @@
                         value: valueData
                     } ,
                     success: function (response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Success') }}!", "{{ trans('Thành Công !') }}", {
                             icon: "success",
                             buttons: {
@@ -145,6 +157,7 @@
                         }, 1500);
                     },
                     error: function(response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Error') }}!", response.responseJSON.message, {
                             icon: "error",
                             buttons: {
@@ -179,6 +192,9 @@
             },
         }).then((Delete) => {
             if (Delete) {
+                var loadingElement = document.getElementById('loading');
+                // Hiển thị thông báo loading
+                loadingElement.style.display = 'block';
                 $.ajax({
                     url: "{{ asset('api/admin/spec/delete') }}",
                     type: "post",
@@ -189,6 +205,7 @@
                         id: id,
                     } ,
                     success: function (response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Deleted!') }}!", "{{ trans('Thành Công !') }}", {
                             icon: "success",
                             buttons: {
@@ -202,6 +219,7 @@
                         }, 1000);
                     },
                     error: function(response) {
+                        loadingElement.style.display = 'none';
                         swal("{{ trans('Error!') }}!", response.responseJSON.message, {
                             icon: "error",
                             buttons: {
