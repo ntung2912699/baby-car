@@ -219,6 +219,7 @@ class ProductController extends Controller
             if ($product && isset($product->spec)) {
                 $spec = $product->spec;
             }
+
             return view('admin.page.product.form_edit', compact(
                 'categories',
                 'producers',

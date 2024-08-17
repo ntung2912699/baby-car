@@ -146,6 +146,8 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         $query = $this->model->query();
 
+        $query->select('product.*');
+
         // Tìm kiếm trong các trường fillable, ngoại trừ các trường liên kết
         foreach ($this->model->getFillable() as $field) {
             if (!in_array($field, ['status_id', 'producer_id', 'category_id', 'model_id'])) {
@@ -153,14 +155,17 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             }
         }
 
-        // Thực hiện join với các bảng liên quan và thêm điều kiện tìm kiếm theo tên
-        $query->leftJoin('product_status', 'product_status.id', '=', 'product.status_id');
+        $query->leftJoin('product_status', 'product_status.id', '=', 'product.status_id')
+            ->addSelect('product_status.name as status_name'); // Đặt alias cho tên trạng thái
 
-        $query->leftJoin('producer', 'producer.id', '=', 'product.producer_id');
+        $query->leftJoin('producer', 'producer.id', '=', 'product.producer_id')
+            ->addSelect('producer.name as producer_name'); // Đặt alias cho tên nhà sản xuất
 
-        $query->leftJoin('category', 'category.id', '=', 'product.category_id');
+        $query->leftJoin('category', 'category.id', '=', 'product.category_id')
+            ->addSelect('category.name as category_name'); // Đặt alias cho tên danh mục
 
-        $query->leftJoin('product_model', 'product_model.id', '=', 'product.model_id');
+        $query->leftJoin('product_model', 'product_model.id', '=', 'product.model_id')
+            ->addSelect('product_model.name as model_name');
 
         // Điều kiện tìm kiếm cho tên của các bảng liên kết
         $query->orwhere(function ($q) use ($searchKey) {

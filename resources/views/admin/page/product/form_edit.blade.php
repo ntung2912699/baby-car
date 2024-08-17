@@ -118,7 +118,7 @@
                     </div>
                     <div class="card-action">
                         <button class="btn btn-primary">Submit</button>
-                        <button class="btn btn-secondary">Cancel</button>
+                        <a href="{{ route('product.index') }}" class="btn btn-secondary">Cancel</a>
                     </div>
                 </div>
             </form>
