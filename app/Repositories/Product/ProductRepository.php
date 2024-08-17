@@ -134,5 +134,57 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
         return $query->paginate(12);
     }
+
+    /**
+     * @param $searchKey
+     * @param $perPage
+     * @param $sortFields
+     * @param $sortOrder
+     * @return mixed
+     */
+    public function searchMultipleColumnProduct($searchKey, $perPage, $sortFields, $sortOrder)
+    {
+        $query = $this->model->query();
+
+        // Tìm kiếm trong các trường fillable, ngoại trừ các trường liên kết
+        foreach ($this->model->getFillable() as $field) {
+            if (!in_array($field, ['status_id', 'producer_id', 'category_id', 'model_id'])) {
+                $query->orWhere('product.' . $field, 'like', '%' . $searchKey . '%');
+            }
+        }
+
+        // Thực hiện join với các bảng liên quan và thêm điều kiện tìm kiếm theo tên
+        $query->leftJoin('product_status', 'product_status.id', '=', 'product.status_id');
+
+        $query->leftJoin('producer', 'producer.id', '=', 'product.producer_id');
+
+        $query->leftJoin('category', 'category.id', '=', 'product.category_id');
+
+        $query->leftJoin('product_model', 'product_model.id', '=', 'product.model_id');
+
+        // Điều kiện tìm kiếm cho tên của các bảng liên kết
+        $query->orwhere(function ($q) use ($searchKey) {
+            $q->orWhere('product_status.name', 'like', '%' . $searchKey . '%')
+                ->orWhere('producer.name', 'like', '%' . $searchKey . '%')
+                ->orWhere('category.name', 'like', '%' . $searchKey . '%')
+                ->orWhere('product_model.name', 'like', '%' . $searchKey . '%');
+        });
+
+        // Điều kiện tìm kiếm cho các trường trong bảng sản phẩm
+        $query->orwhere(function ($q) use ($searchKey) {
+            $q->orWhere('product.id', 'like', '%' . $searchKey . '%')
+                ->orWhere('product.name', 'like', '%' . $searchKey . '%')
+                ->orWhere('product.price', 'like', '%' . $searchKey . '%')
+                ->orWhere('product.thumbnail', 'like', '%' . $searchKey . '%')
+                ->orWhere('product.gallery', 'like', '%' . $searchKey . '%')
+                ->orWhere('product.description', 'like', '%' . $searchKey . '%');
+        });
+
+        // Sắp xếp kết quả
+        $query->orderBy('product.' . $sortFields, $sortOrder);
+
+        // Phân trang kết quả
+        return $query->paginate($perPage);
+    }
 }
 

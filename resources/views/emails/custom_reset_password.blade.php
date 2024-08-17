@@ -44,7 +44,7 @@
         </div>
         <div class="card-body">
             <p>Xin chào {{ $name }},</p>
-            <p>Bạn vừa yêu cầu đặt lại mật khẩu cho tài khoản Navy Oto của mình. Vui lòng nhấp vào nút bên dưới để đặt lại mật khẩu:</p>
+            <p>Bạn vừa yêu cầu đặt lại mật khẩu cho tài khoản NiceCar của mình. Vui lòng nhấp vào nút bên dưới để đặt lại mật khẩu:</p>
             <p class="text-center">
                 <a href="{{ url('password/reset', $token) . '?email=' . urlencode($email) }}" class="btn btn-primary" style="color: white;">
                     Đặt Lại Mật Khẩu

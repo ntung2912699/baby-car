@@ -96,7 +96,7 @@ class ProductController extends Controller
             $perPage = $request->get('perPage', 10);
             $searchKey = $request->get('searchKey');
             if ($searchKey) {
-                $product_data = $this->productRepository->searchMultipleColumn($searchKey, $perPage, $sortField, $sortOrder);
+                $product_data = $this->productRepository->searchMultipleColumnProduct($searchKey, $perPage, $sortField, $sortOrder);
             } else {
                 $product_data = $this->productRepository->orderBy($sortField, $sortOrder)->paginate($perPage);
             }

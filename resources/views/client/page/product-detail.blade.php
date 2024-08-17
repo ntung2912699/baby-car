@@ -65,43 +65,43 @@
         }
 
         /* Modal Custom Style */
-        /*.modal-dialog {*/
-        /*    max-width: 100%; !* Điều chỉnh kích thước modal cho các thiết bị di động *!*/
-        /*    !*margin: 5vh auto; !* Thêm khoảng cách từ đầu màn hình cho thiết bị di động *!*!*/
-        /*    padding-top: 80px;*/
-        /*}*/
+        .modal-thumbnail {
+            max-width: 100%; /* Điều chỉnh kích thước modal cho các thiết bị di động */
+            /*margin: 5vh auto; !* Thêm khoảng cách từ đầu màn hình cho thiết bị di động *!*/
+            padding-top: 80px;
+        }
 
-        /*.modal-content {*/
-        /*    border-radius: 0;*/
-        /*}*/
+        .modal-thumbnail .modal-content {
+            border-radius: 0;
+        }
 
-        /*.modal-body {*/
-        /*    padding: 0;*/
-        /*    position: relative;*/
-        /*    overflow: hidden; !* Đảm bảo rằng các phần tử không bị tràn ra ngoài *!*/
-        /*}*/
+        .modal-thumbnail .modal-body {
+            padding: 0;
+            position: relative;
+            overflow: hidden; /* Đảm bảo rằng các phần tử không bị tràn ra ngoài */
+        }
 
-        /*.modal-body img {*/
-        /*    width: 100%;*/
-        /*    height: auto;*/
-        /*    cursor: pointer;*/
-        /*    transition: transform 0.3s ease;*/
-        /*    touch-action: none; !* Vô hiệu hóa các hành động chạm mặc định *!*/
-        /*}*/
+        .modal-thumbnail .modal-body img {
+            width: 100%;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            touch-action: none; /* Vô hiệu hóa các hành động chạm mặc định */
+        }
 
-        /*.close-icon {*/
-        /*    position: absolute;*/
-        /*    top: 10px;*/
-        /*    right: 10px;*/
-        /*    font-size: 2rem;*/
-        /*    color: #fff;*/
-        /*    cursor: pointer;*/
-        /*    z-index: 1050;*/
-        /*}*/
+        .modal-thumbnail .close-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 2rem;
+            color: #fff;
+            cursor: pointer;
+            z-index: 1050;
+        }
 
-        /*.modal-content img.zoomed {*/
-        /*    transform: scale(3);*/
-        /*}*/
+        .modal-thumbnail .modal-content img.zoomed {
+            transform: scale(3);
+        }
 
         @media (max-width: 768px) {
             .modal-dialog {
@@ -122,7 +122,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="text text-center">
-                        <span class="subheading">{{ $product->producer->name }}</span>
+                        <span class="subheading">{{ $product->producer->name }} > {{ $product->category->name }} > {{ $product->model->name }}</span>
                         <h2>{{ $product->name }}</h2>
                         <h2 style="color: #1089ff">{{ $product->price }}</h2>
                     </div>
@@ -217,7 +217,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-thumbnail modal-dialog modal-lg" role="document">
             <span class="close-icon" data-dismiss="modal" aria-label="Close">&times;</span>
             <div class="modal-content">
                 <div class="modal-body">
