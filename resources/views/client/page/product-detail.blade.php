@@ -65,43 +65,43 @@
         }
 
         /* Modal Custom Style */
-        .modal-dialog {
-            max-width: 100%; /* Điều chỉnh kích thước modal cho các thiết bị di động */
-            /*margin: 5vh auto; !* Thêm khoảng cách từ đầu màn hình cho thiết bị di động *!*/
-            padding-top: 80px;
-        }
+        /*.modal-dialog {*/
+        /*    max-width: 100%; !* Điều chỉnh kích thước modal cho các thiết bị di động *!*/
+        /*    !*margin: 5vh auto; !* Thêm khoảng cách từ đầu màn hình cho thiết bị di động *!*!*/
+        /*    padding-top: 80px;*/
+        /*}*/
 
-        .modal-content {
-            border-radius: 0;
-        }
+        /*.modal-content {*/
+        /*    border-radius: 0;*/
+        /*}*/
 
-        .modal-body {
-            padding: 0;
-            position: relative;
-            overflow: hidden; /* Đảm bảo rằng các phần tử không bị tràn ra ngoài */
-        }
+        /*.modal-body {*/
+        /*    padding: 0;*/
+        /*    position: relative;*/
+        /*    overflow: hidden; !* Đảm bảo rằng các phần tử không bị tràn ra ngoài *!*/
+        /*}*/
 
-        .modal-body img {
-            width: 100%;
-            height: auto;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            touch-action: none; /* Vô hiệu hóa các hành động chạm mặc định */
-        }
+        /*.modal-body img {*/
+        /*    width: 100%;*/
+        /*    height: auto;*/
+        /*    cursor: pointer;*/
+        /*    transition: transform 0.3s ease;*/
+        /*    touch-action: none; !* Vô hiệu hóa các hành động chạm mặc định *!*/
+        /*}*/
 
-        .close-icon {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 2rem;
-            color: #fff;
-            cursor: pointer;
-            z-index: 1050;
-        }
+        /*.close-icon {*/
+        /*    position: absolute;*/
+        /*    top: 10px;*/
+        /*    right: 10px;*/
+        /*    font-size: 2rem;*/
+        /*    color: #fff;*/
+        /*    cursor: pointer;*/
+        /*    z-index: 1050;*/
+        /*}*/
 
-        .modal-content img.zoomed {
-            transform: scale(3);
-        }
+        /*.modal-content img.zoomed {*/
+        /*    transform: scale(3);*/
+        /*}*/
 
         @media (max-width: 768px) {
             .modal-dialog {

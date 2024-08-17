@@ -29,13 +29,13 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         // Lấy thông tin category và producer của sản phẩm hiện tại
         $categoryId = $product->category_id;
-        $producerId = $product->producer_id;
+        $modelId = $product->model_id;
         $price = $product->producer_id;
 
         return $this->model
-            ->where(function ($query) use ($categoryId, $producerId, $price) {
+            ->where(function ($query) use ($categoryId, $modelId, $price) {
                 $query->where('category_id', $categoryId)
-                    ->orWhere('producer_id', $producerId)
+                    ->orWhere('model_id', $modelId)
                     ->orWhere('price', '=', $price);
             })
             ->where('id', '!=', $product->id) // Loại trừ sản phẩm hiện tại
