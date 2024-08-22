@@ -190,7 +190,7 @@
             output.src = URL.createObjectURL(fileInput.files[0]);
         } else {
             // Nếu không có file mới, giữ ảnh hiện tại
-            output.src = '{{ $product->thumbnail }}';
+            output.src = '{{ asset($product->thumbnail) }}';
         }
 
         output.onload = function() {
@@ -222,7 +222,7 @@
     // Đặt ảnh hiện tại khi tải trang chỉnh sửa
     window.onload = function() {
         var output = document.getElementById('output-thumbnail');
-        output.src = '{{ $product->thumbnail }}'; // Đảm bảo rằng bạn đã thiết lập đường dẫn ảnh đúng
+        output.src = '{{ asset($product->thumbnail) }}'; // Đảm bảo rằng bạn đã thiết lập đường dẫn ảnh đúng
     };
 
     $(document).ready(function() {
@@ -1388,9 +1388,12 @@
             const imageContainers = document.querySelectorAll('#gallery-require .image-container');
             imageContainers.forEach(container => container.remove());
 
-            for (var i = 0; i < filesArray.length; i ++) {
+            // Lấy đường dẫn asset từ Blade và lưu vào biến
+            const assetPath = "{{ asset('') }}";
+
+            for (var i = 0; i < filesArray.length; i++) {
                 const imageContainer = $('<div class="image-container"></div>');
-                const img = $('<img>').attr('src', filesArray[i]);
+                const img = $('<img>').attr('src', assetPath + filesArray[i]);
                 const removeButton = $('<button type="button" class="remove-image">&times;</button>');
                 const urlTarget = filesArray[i];
                 removeButton.on('click', function() {

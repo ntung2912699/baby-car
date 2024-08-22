@@ -85,7 +85,7 @@ class ProducerController extends Controller
                 $file = $request->file('logo');
                 $source = 'upload/producer/';
                 $file_name = $this->producerRepository->upload($file , $source);
-                $data['logo'] = url($file_name);
+                $data['logo'] = $file_name;
             }
             $this->producerRepository->create($data);
             $newProducer = $this->producerRepository->getAll();
@@ -161,7 +161,7 @@ class ProducerController extends Controller
                 $file = $request->file('logo');
                 $source = 'upload/producer/';
                 $file_name = $this->producerRepository->upload($file , $source);
-                $newLogo = url($file_name);
+                $newLogo = $file_name;
             }
             $producerNew = $this->producerRepository->update(
                 $idproducer,

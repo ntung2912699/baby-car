@@ -173,7 +173,8 @@
         const img = document.createElement('img');
         img.className = 'avatar-img rounded-circle';
         img.id = 'outputLogoEdit';
-        img.src = file;
+        var filePath = "{{ asset('') }}" + file;
+        img.src = filePath;
         img.alt = '...';
         img.addEventListener('mouseover', function() {
             img.style.opacity = '0.5';

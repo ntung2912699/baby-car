@@ -82,7 +82,7 @@
                                         <div id="preview-image">
                                             <img id="output-thumbnail" alt="..." class="imagecheck-image"
                                                  @if ($product && isset($product->thumbnail))
-                                                 src="{{ $product->thumbnail }}"
+                                                 src="{{ asset($product->thumbnail) }}"
                                                  @else
                                                 src=""
                                                  @endif

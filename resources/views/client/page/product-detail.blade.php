@@ -138,11 +138,11 @@
                         </ol>
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img class="d-block w-100" src="{{ $product->thumbnail }}" alt="First slide">
+                                <img class="d-block w-100" src="{{ asset($product->thumbnail) }}" alt="First slide">
                             </div>
                             @foreach($gallery as $image)
                                 <div class="carousel-item">
-                                    <img class="d-block w-100" src="{{ $image }}" alt="Slide">
+                                    <img class="d-block w-100" src="{{ asset($image) }}" alt="Slide">
                                 </div>
                             @endforeach
                         </div>
@@ -194,7 +194,7 @@
                                 <a href="{{ route('product.detail', ['id' => $item->id]) }}">
                                     <div class="car-wrap rounded ftco-animate">
                                         <div class="img rounded d-flex align-items-end"
-                                             style="background-image: url({{ $item->thumbnail }});">
+                                             style="background-image: url({{ asset($item->thumbnail) }});">
                                         </div>
                                         <div class="text">
                                             <h2 class="mb-0 product-title">
@@ -230,11 +230,11 @@
                         </ol>
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img class="d-block w-100" src="{{ $product->thumbnail }}" alt="First slide">
+                                <img class="d-block w-100" src="{{ asset($product->thumbnail) }}" alt="First slide">
                             </div>
                             @foreach($gallery as $image)
                                 <div class="carousel-item">
-                                    <img class="d-block w-100" src="{{ $image }}" alt="Slide">
+                                    <img class="d-block w-100" src="{{ asset($image) }}" alt="Slide">
                                 </div>
                             @endforeach
                         </div>

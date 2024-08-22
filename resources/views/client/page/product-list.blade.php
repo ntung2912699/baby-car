@@ -294,7 +294,7 @@
                             <a href="{{ route('product.detail', ['id' => $product->id]) }}">
                                 <div class="car-wrap rounded ftco-animate">
                                     <div class="img rounded d-flex align-items-end"
-                                         style="background-image: url({{ $product->thumbnail }});">
+                                         style="background-image: url({{ asset($product->thumbnail) }});">
                                     </div>
                                     <div class="text">
                                         <h2 class="mb-0 product-title">

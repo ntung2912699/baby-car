@@ -116,7 +116,7 @@
                                                 <td class="text-start">{{ $category->id }}</td>
                                                 <td class="text-start">
                                                     <div class="avatar">
-                                                        <img src="{{ $category->logo }}" alt="..." class="avatar-img rounded-circle"
+                                                        <img src="{{ asset($category->logo) }}" alt="..." class="avatar-img rounded-circle"
                                                              onclick="EditClassifyLogo({{ $category->id }}, '{{ $category->logo }}')">
                                                     </div>
                                                     {{ $category->name }}

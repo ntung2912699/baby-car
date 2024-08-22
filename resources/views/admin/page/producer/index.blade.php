@@ -116,7 +116,7 @@
                                                 <td class="text-start">{{ $producer->id }}</td>
                                                 <td class="text-start">
                                                     <div class="avatar">
-                                                        <img src="{{ $producer->logo }}" alt="..." class="avatar-img rounded-circle"
+                                                        <img src="{{ asset($producer->logo) }}" alt="..." class="avatar-img rounded-circle"
                                                              onclick="EditProducerLogo({{ $producer->id }}, '{{ $producer->logo }}')">
                                                     </div>
                                                     {{ $producer->name }}

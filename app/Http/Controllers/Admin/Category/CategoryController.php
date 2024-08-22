@@ -86,7 +86,7 @@ class CategoryController extends Controller
                 $file = $request->file('logo');
                 $source = 'upload/category/';
                 $file_name = $this->categoryRepository->upload($file, $source);
-                $data['logo'] = url($file_name);
+                $data['logo'] = $file_name;
             }
             $this->categoryRepository->create($data);
             $Categories = $this->categoryRepository->getAll();
@@ -163,7 +163,7 @@ class CategoryController extends Controller
                 $file = $request->file('logo');
                 $source = 'upload/category/';
                 $file_name = $this->categoryRepository->upload($file, $source);
-                $newLogo = url($file_name);
+                $newLogo = $file_name;
             }
             $CategoryNew = $this->categoryRepository->update(
                 $idCategory,

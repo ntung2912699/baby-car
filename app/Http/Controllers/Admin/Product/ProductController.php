@@ -164,14 +164,14 @@ class ProductController extends Controller
                 $file = $request->file('thumbnail');
                 $source = 'upload/product/thumbnail/';
                 $file_name = $this->productRepository->upload($file, $source);
-                $data['thumbnail'] = url($file_name);
+                $data['thumbnail'] = $file_name;
             }
             if ($request->hasFile('gallery')) {
                 $galleryList = [];
                 foreach ($request->file('gallery') as $file) {
                     $source = 'upload/product/gallery/';
                     $file_name = $this->productRepository->upload($file, $source);
-                    $galleryList[] = url($file_name);
+                    $galleryList[] = $file_name;
                 }
                 $data['gallery'] = implode('|', $galleryList);
             }
@@ -264,7 +264,7 @@ class ProductController extends Controller
                 $file = $request->file('thumbnail');
                 $source = 'upload/product/thumbnail/';
                 $file_name = $this->productRepository->upload($file, $source);
-                $data['thumbnail'] = url($file_name);
+                $data['thumbnail'] = $file_name;
             } else {
                 $data['thumbnail'] = $productTarget->thumbnail;
             }
@@ -273,7 +273,7 @@ class ProductController extends Controller
                 foreach ($request->file('gallery') as $file) {
                     $source = 'upload/product/gallery/';
                     $file_name = $this->productRepository->upload($file, $source);
-                    $galleryList[] = url($file_name);
+                    $galleryList[] = $file_name;
                 }
                 $galleryOld = explode('|', $productTarget->gallery);
                 $galleryMergedArray = array_merge($galleryOld, $galleryList);
