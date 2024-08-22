@@ -142,8 +142,8 @@
                 @foreach($productList as $product)
                     <div>
                         <input type="checkbox" name="products[]" value="{{ $product->id }}" id="product-{{ $product->id }}">
-                        <label class="product-name" data-product-id="{{ $product->id }}">{{ $product->name }}</label>
-                        <img src="{{ $product->thumbnail }}" alt="Thumbnail" class="thumbnail">
+                        <label class="product-name">{{ $product->name }}</label>
+                        <img data-product-id="{{ $product->id }}" src="{{ asset($product->thumbnail) }}" alt="Thumbnail" class="thumbnail">
                     </div>
                 @endforeach
             </div>
@@ -181,7 +181,7 @@
 
             var loadingElement = document.getElementById('loading');
 
-            document.querySelectorAll('.product-name').forEach(function(element) {
+            document.querySelectorAll('.thumbnail').forEach(function(element) {
                 element.addEventListener('click', function() {
                     var productId = this.getAttribute('data-product-id');
 
@@ -193,7 +193,7 @@
                         .then(response => response.json())
                         .then(data => {
                             document.getElementById('productName').innerText = data.name;
-                            document.getElementById('productImage').src = data.thumbnail;
+                            document.getElementById('productImage').src = "{{ asset('') }}" + data.thumbnail;
                             document.getElementById('productDescription').innerText = data.description;
 
                             // Ẩn thông báo loading và hiển thị modal
@@ -203,7 +203,6 @@
                         .catch(error => {
                             // Nếu có lỗi, ẩn thông báo loading và có thể thông báo lỗi
                             loadingElement.style.display = 'none';
-                            console.error('Error fetching product details:', error);
                         });
                 });
             });

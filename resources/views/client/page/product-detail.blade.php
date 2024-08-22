@@ -6,6 +6,37 @@
 
     <style>
 
+        /* styles.css */
+        .image-zoom-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        #zoom-image {
+            width: 100%;
+            height: auto;
+        }
+
+        #zoom-lens {
+            position: absolute;
+            border: 2px solid #000;
+            width: 100px;
+            height: 100px;
+            cursor: crosshair;
+        }
+
+        #zoom-result {
+            position: absolute;
+            border: 1px solid #000;
+            width: 300px;
+            height: 300px;
+            overflow: hidden;
+            top: 0;
+            left: 110%;
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+
         .product-title {
             white-space: nowrap; /* Ngăn không cho văn bản xuống dòng */
             overflow: hidden; /* Ẩn phần văn bản bị tràn ra ngoài */
@@ -260,20 +291,71 @@
                 $('#modalCarousel').carousel(index);
             });
 
-            // // Xử lý zoom trên thiết bị di động
-            // $('.modal-body img').on('dblclick', function () {
-            //     $(this).toggleClass('zoomed');
-            // });
-            //
-            // // Đảm bảo zoom hoạt động trên các thiết bị di động
-            // $('.modal-body img').on('touchstart', function () {
-            //     var $this = $(this);
-            //     if ($this.hasClass('zoomed')) {
-            //         $this.removeClass('zoomed');
-            //     } else {
-            //         $this.addClass('zoomed');
-            //     }
-            // });
+            // script.js
+            $(document).ready(function() {
+                var $image = $('#zoom-image');
+                var $lens = $('#zoom-lens');
+                var $result = $('#zoom-result');
+
+                // Set size for lens and result
+                var lensSize = 100;
+                var resultSize = 300;
+
+                $lens.css({
+                    width: lensSize + 'px',
+                    height: lensSize + 'px',
+                    borderRadius: '50%'
+                });
+
+                $result.css({
+                    width: resultSize + 'px',
+                    height: resultSize + 'px',
+                    backgroundImage: 'url(' + $image.attr('src') + ')',
+                    backgroundSize: $image.width() * (resultSize / lensSize) + 'px ' + $image.height() * (resultSize / lensSize) + 'px'
+                });
+
+                // Mousemove event handler
+                $image.mousemove(function(e) {
+                    var imageOffset = $image.offset();
+                    var x = e.pageX - imageOffset.left;
+                    var y = e.pageY - imageOffset.top;
+
+                    // Calculate lens position
+                    var lensX = x - $lens.width() / 2;
+                    var lensY = y - $lens.height() / 2;
+
+                    // Ensure lens is within image bounds
+                    if (lensX < 0) lensX = 0;
+                    if (lensY < 0) lensY = 0;
+                    if (lensX > $image.width() - $lens.width()) lensX = $image.width() - $lens.width();
+                    if (lensY > $image.height() - $lens.height()) lensY = $image.height() - $lens.height();
+
+                    $lens.css({
+                        left: lensX + 'px',
+                        top: lensY + 'px'
+                    });
+
+                    // Calculate result image position
+                    var resultX = lensX * (resultSize / lensSize);
+                    var resultY = lensY * (resultSize / lensSize);
+
+                    $result.css({
+                        backgroundPosition: '-' + resultX + 'px -' + resultY + 'px'
+                    });
+                });
+
+                // Hide lens and result on mouseleave
+                $image.mouseleave(function() {
+                    $lens.hide();
+                    $result.hide();
+                });
+
+                // Show lens and result on mouseenter
+                $image.mouseenter(function() {
+                    $lens.show();
+                    $result.show();
+                });
+            });
         });
     </script>
 @stop

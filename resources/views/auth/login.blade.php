@@ -15,6 +15,13 @@
                                 {{ $errors->first('error') }}
                             </div>
                         @endif
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                @foreach ($errors->all() as $error)
+                                    <div>{{ $error }}</div>
+                                @endforeach
+                            </div>
+                        @endif
                         <form method="POST" id="login-form" action="{{ route('login') }}">
                             @csrf
 
@@ -23,7 +30,7 @@
                                 <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
                                 <span class="invalid-feedback" role="alert" style="display: none;">
                                 <strong>{{ __('Email không hợp lệ') }}</strong>
-                            </span>
+                                </span>
                             </div>
 
                             <div class="mb-3">

@@ -156,8 +156,15 @@
     <section class="ftco-section bg-light">
         <div class="container">
             <div class="filter-section">
-                <h3 class="mb-4">{{ __('Bộ Lọc') }}</h3>
-                <form action="{{ route('product.search') }}" method="POST">
+                <div class="row">
+                    <div class="col-7">
+                        <h3 class="mb-4">{{ __('Bộ Lọc') }}</h3>
+                    </div>
+                    <div class="col-5" style="text-align: right">
+                        <a href="#" id="reset-filters">{{ __('Xóa Bộ Lọc') }}</a>
+                    </div>
+                </div>
+                <form action="{{ route('product.search') }}" id="fillter-form" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
@@ -521,6 +528,74 @@
                     modelSelect.empty().append('<option value="">{{ __("Tất Cả") }}</option>').prop('disabled', true);
                 }
             });
+        });
+
+        $(document).ready(function() {
+            $('#reset-filters').on('click', function() {
+                // Reset tất cả các trường trong form
+                $('#fillter-form').trigger('reset');
+
+                // Reset các giá trị của các trường không được reset bởi `reset()`
+                $('#price_range_min').val(20000000);
+                $('#price_range_max').val(3100000000);
+                $('#start_year').val('');
+                $('#end_year').val('');
+
+                // Hiển thị lại các phần đã ẩn nếu cần
+                $('#price_range_section').hide(); // Ẩn phần khoảng giá
+                $('#attribute-list').hide(); // Ẩn danh sách thuộc tính
+                $('#enable_price_range').prop('checked', false); // Bỏ chọn checkbox khoảng giá
+
+                // Cập nhật lại thanh điều khiển khoảng giá
+                // Cập nhật lại thanh điều khiển khoảng giá
+                var slider = document.getElementById('price_range_slider');
+                if (slider) {
+                    if (slider.noUiSlider) { // Kiểm tra nếu slider đã được khởi tạo
+                        slider.noUiSlider.destroy(); // Xóa slider nếu đã khởi tạo
+                    }
+                    noUiSlider.create(slider, {
+                        start: [20000000, 3100000000], // Khởi tạo lại giá trị bắt đầu của slider
+                        connect: true,
+                        range: {
+                            'min': 20000000,
+                            'max': 3100000000
+                        },
+                        step: 10000000,
+                        format: {
+                            to: function (value) {
+                                return Math.round(value);
+                            },
+                            from: function (value) {
+                                return Number(value);
+                            }
+                        }
+                    });
+                }
+
+                // Reset select và trạng thái các checkbox
+                $('#model').prop('disabled', true).val('');
+                $('#producer').val('');
+
+                // Bỏ chọn tất cả các checkbox thuộc tính
+                $('.attribute-check').prop('checked', false);
+
+                // Đảm bảo các thành phần khác của UI được đặt lại trạng thái mặc định
+                $('#toggle-attributes').text('Lọc Theo Thuộc Tính'); // Đảm bảo sử dụng văn bản phù hợp nếu không sử dụng Blade templates
+
+                // Cập nhật lại giao diện cho phần khoảng giá nếu checkbox đã được chọn
+                if ($('#enable_price_range').is(':checked')) {
+                    $('#price_range_section').show();
+                } else {
+                    $('#price_range_section').hide();
+                }
+            });
+
+            // Đảm bảo rằng phần khoảng giá có thể kích hoạt khi trang được tải lại với checkbox đã được chọn
+            if ($('#enable_price_range').is(':checked')) {
+                $('#price_range_section').show();
+            } else {
+                $('#price_range_section').hide();
+            }
         });
     </script>
 @stop
