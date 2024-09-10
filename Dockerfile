@@ -11,7 +11,7 @@ RUN chown -R www-data:www-data /var/www/html
 
 # Cài đặt các phụ thuộc của ứng dụng Laravel
 WORKDIR /var/www/html
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install
 
 # Cấu hình môi trường
 ENV SKIP_COMPOSER 1
