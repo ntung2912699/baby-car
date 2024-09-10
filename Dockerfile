@@ -9,10 +9,6 @@ COPY . /var/www/html
 # Thiết lập quyền sở hữu cho thư mục ứng dụng
 RUN chown -R www-data:www-data /var/www/html
 
-# Cài đặt các phụ thuộc của ứng dụng Laravel
-WORKDIR /var/www/html
-RUN composer install
-
 # Cấu hình môi trường
 ENV SKIP_COMPOSER 1
 ENV WEBROOT /var/www/html/public
