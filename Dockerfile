@@ -3,12 +3,6 @@ FROM richarvey/nginx-php-fpm:1.7.2
 # Cài đặt Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Cài đặt các phần phụ thuộc hệ thống cần thiết
-RUN apt-get update && apt-get install -y \
-    unzip \
-    git \
-    && rm -rf /var/lib/apt/lists/*
-
 # Sao chép mã nguồn ứng dụng vào container
 COPY . /var/www/html
 
