@@ -1,15 +1,8 @@
-FROM richarvey/nginx-php-fpm:1.7.2
+FROM richarvey/nginx-php-fpm:latest
 
-# Cài đặt Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY . .
 
-# Sao chép mã nguồn ứng dụng vào container
-COPY . /var/www/html
-
-# Thiết lập quyền sở hữu cho thư mục ứng dụng
-RUN chown -R www-data:www-data /var/www/html
-
-# Cấu hình môi trường
+# Image config
 ENV SKIP_COMPOSER 1
 ENV WEBROOT /var/www/html/public
 ENV PHP_ERRORS_STDERR 1
@@ -21,8 +14,10 @@ ENV APP_ENV production
 ENV APP_DEBUG false
 ENV LOG_CHANNEL stderr
 
-# Cho phép Composer chạy dưới quyền root
+# Allow composer to run as root
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
-# Lệnh khởi động
+# Install node and npm for Vite
+ RUN apk add --update nodejs npm
+
 CMD ["/start.sh"]
