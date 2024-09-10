@@ -72,6 +72,7 @@ return array(
     'App\\Repositories\\Status\\StatusRepositoryInterface' => $baseDir . '/app/Repositories/Status/StatusRepositoryInterface.php',
     'App\\Repositories\\User\\UserRepository' => $baseDir . '/app/Repositories/User/UserRepository.php',
     'App\\Repositories\\User\\UserRepositoryInterface' => $baseDir . '/app/Repositories/User/UserRepositoryInterface.php',
+    'App\\Services\\FacebookService' => $baseDir . '/app/Services/FacebookService.php',
     'App\\Services\\OtpServices' => $baseDir . '/app/Services/OtpServices.php',
     'Assert\\Assert' => $vendorDir . '/beberlei/assert/lib/Assert/Assert.php',
     'Assert\\Assertion' => $vendorDir . '/beberlei/assert/lib/Assert/Assertion.php',

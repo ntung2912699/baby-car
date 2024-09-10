@@ -704,6 +704,7 @@ class ComposerStaticInita28d4251b5fd287dc5f02f718fd3ff60
         'App\\Repositories\\Status\\StatusRepositoryInterface' => __DIR__ . '/../..' . '/app/Repositories/Status/StatusRepositoryInterface.php',
         'App\\Repositories\\User\\UserRepository' => __DIR__ . '/../..' . '/app/Repositories/User/UserRepository.php',
         'App\\Repositories\\User\\UserRepositoryInterface' => __DIR__ . '/../..' . '/app/Repositories/User/UserRepositoryInterface.php',
+        'App\\Services\\FacebookService' => __DIR__ . '/../..' . '/app/Services/FacebookService.php',
         'App\\Services\\OtpServices' => __DIR__ . '/../..' . '/app/Services/OtpServices.php',
         'Assert\\Assert' => __DIR__ . '/..' . '/beberlei/assert/lib/Assert/Assert.php',
         'Assert\\Assertion' => __DIR__ . '/..' . '/beberlei/assert/lib/Assert/Assertion.php',
