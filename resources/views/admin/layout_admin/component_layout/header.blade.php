@@ -331,7 +331,7 @@
                     >
                         <div class="avatar-sm">
                             <img
-                                src="{{ Auth::user()->avatar }}"
+                                src="{{ asset(Auth::user()->avatar) }}"
                                 alt="..."
                                 class="avatar-img rounded-circle"
                             />
@@ -347,7 +347,7 @@
                                 <div class="user-box">
                                     <div class="avatar-lg">
                                         <img
-                                            src="{{ Auth::user()->avatar }}"
+                                            src="{{ asset(Auth::user()->avatar) }}"
                                             alt=""
                                             class="avatar-img rounded"
                                         />
