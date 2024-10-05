@@ -151,180 +151,191 @@
             color: #6c757d !important; /* Màu chữ cho các option khi select bị disabled */
         }
 
+        .custom-container {
+            max-width: 80%; /* Chiều rộng tối đa 90% */
+            margin: 0 auto; /* Căn giữa container */
+        }
+
     </style>
 
     <section class="ftco-section bg-light">
-        <div class="container">
-            <div class="filter-section">
-                <div class="row">
-                    <div class="col-7">
-                        <h3 class="mb-4">{{ __('Bộ Lọc') }}</h3>
-                    </div>
-                    <div class="col-5" style="text-align: right">
-                        <a href="#" id="reset-filters">{{ __('Xóa Bộ Lọc') }}</a>
-                    </div>
-                </div>
-                <form action="{{ route('product.search') }}" id="fillter-form" method="POST">
-                    @csrf
+        <div class="custom-container">
+            <div class="row">
+                <div class="filter-section col-4">
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="query">{{ __('Từ Khóa') }}</label>
-                                <input type="text" class="form-control" id="query" name="query" value="{{ request()->input('query') }}" placeholder="Nhập từ khóa tìm kiếm...">
-                            </div>
+                        <div class="col-7">
+                            <h3 class="mb-4">{{ __('Bộ Lọc') }}</h3>
                         </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="producer">{{ __('Hãng Xe') }}</label>
-                                <select id="producer" name="producer" class="form-control">
-                                    <option value="">{{ __('Tất Cả') }}</option>
-                                    @foreach($producers as $producer)
-                                        <option value="{{ $producer->id }}" {{ request()->input('producer') == $producer->id || isset($producerTargetId) && $producerTargetId == $producer->id ? 'selected' : '' }}>
-                                            {{ $producer->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="model">{{ __('Dòng Xe') }}</label>
-                                <select id="model" name="model" disabled class="form-control">
-                                    <option value="">{{ __('Tất Cả') }}</option>
-{{--                                    @foreach($productModels as $model)--}}
-{{--                                        <option value="{{ $model->id }}" {{ request()->input('model') == $model->id ? 'selected' : '' }}>--}}
-{{--                                            {{ $model->name }}--}}
-{{--                                        </option>--}}
-{{--                                    @endforeach--}}
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <input type="checkbox" id="enable_price_range" name="enable_price_range" {{ request()->input('enable_price_range') ? 'checked' : '' }}>
-                                <label for="enable_price_range">{{ __('Khoảng Giá') }}</label>
-                                <div id="price_range_section" style="{{ request()->input('enable_price_range') ? '' : 'display: none;' }}">
-                                    <div id="price_range_slider"></div>
-                                    <div class="slider-labels">
-                                        <span id="label_min">{{ __('< 100tr') }}</span>
-                                        <span id="label_max">{{ __('> 2 Tỷ') }}</span>
-                                    </div>
-                                    <input type="hidden" id="price_range_min" name="price_range_min" value="{{ request()->input('price_range_min', 20000000) }}">
-                                    <input type="hidden" id="price_range_max" name="price_range_max" value="{{ request()->input('price_range_max', 3100000000) }}">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="category">{{ __('Danh Kiểu Dáng') }}</label>
-                                <select id="category" name="category" class="form-control">
-                                    <option value="">{{ __('Tất Cả') }}</option>
-                                    @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ request()->input('category') == $category->id ? 'selected' : '' }}>
-                                            {{ $category->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4 row">
-                            <div class="form-group col-6">
-                                <label for="start_year">{{ __('Năm SX Từ') }}</label>
-                                <select id="start_year" name="start_year" class="form-control">
-                                    <option value="">{{ __('---') }}</option>
-                                    @php
-                                        $currentYear = date('Y'); // Năm hiện tại
-                                        $startYear = 2000; // Năm bắt đầu
-                                    @endphp
-                                    @for ($year = $currentYear; $year >= $startYear; $year--)
-                                        <option value="{{ $year }}" {{ request()->input('start_year') == $year ? 'selected' : '' }}>
-                                            {{ $year }}
-                                        </option>
-                                    @endfor
-                                </select>
-                            </div>
-
-                            <div class="form-group col-6">
-                                <label for="end_year">{{ __('Đến Năm') }}</label>
-                                <select id="end_year" name="end_year" class="form-control">
-                                    @php
-                                        // Đặt $endYear bằng năm hiện tại nếu không có giá trị từ người dùng
-                                        $endYear = request()->input('end_year', $currentYear);
-                                    @endphp
-                                    <option value="">
-                                        {{ __('---') }}
-                                    </option>
-                                    @for ($year = $currentYear; $year >= $startYear; $year--)
-                                        <option value="{{ $year }}" {{ $endYear == $year ? 'selected' : '' }}>
-                                            {{ $year }}
-                                        </option>
-                                    @endfor
-                                </select>
-                            </div>
-                            <span id="msg-year" style="color: red"></span>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label id="toggle-attributes" style="cursor: pointer; color: #01d28e;">{{ __('Lọc Theo Thuộc Tính') }}</label>
-                                <ul class="attribute-list" id="attribute-list" style="display: none;"> <!-- Ẩn danh sách thuộc tính -->
-                                    @foreach($attributes as $attribute)
-                                        <li class="row" style="padding-left: 1.5%">
-                                            <label class="form-check-label" style="color: black">{{ $attribute->name }}</label> :
-                                            @foreach($attribute->spec as $spec)
-                                                <div style="min-width: 100px; padding-left: 20px">
-                                                    <p>
-                                                        <input type="checkbox" class="form-check-input attribute-check visually-hidden" id="attribute_{{ $spec->id }}" name="spec[]" value="{{ $spec->id }}" {{ in_array($spec->id, request()->input('spec', [])) ? 'checked' : '' }}>
-                                                        <label class="form-check-label" for="attribute_{{ $spec->id }}">{{ $spec->value }}</label>
-                                                    </p>
-                                                </div>
-                                            @endforeach
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                        <div class="col-5" style="text-align: right">
+                            <a href="#" id="reset-filters">{{ __('Xóa Bộ Lọc') }}</a>
                         </div>
                     </div>
-                    <button type="submit" class="btn" style="background-color: #01d28e; color: #FFFFFF">{{ __('Tìm Kiếm') }}</button>
-                </form>
-            </div>
+                    <form action="{{ route('product.search') }}" id="fillter-form" method="POST">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="query">{{ __('Từ Khóa') }}</label>
+                                    <input type="text" class="form-control" id="query" name="query" value="{{ request()->input('query') }}" placeholder="Nhập từ khóa tìm kiếm...">
+                                </div>
+                            </div>
 
-            @if(isset($products) && count($products) > 0)
-                <div class="row">
-                    @foreach($products as $product)
-                        <div class="col-md-3">
-                            <a href="{{ route('product.detail', ['id' => $product->id]) }}">
-                                <div class="car-wrap rounded ftco-animate">
-                                    <div class="img rounded d-flex align-items-end"
-                                         style="background-image: url({{ asset($product->thumbnail) }});">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="producer">{{ __('Hãng Xe') }}</label>
+                                    <select id="producer" name="producer" class="form-control">
+                                        <option value="">{{ __('Tất Cả') }}</option>
+                                        @foreach($producers as $producer)
+                                            <option value="{{ $producer->id }}" {{ request()->input('producer') == $producer->id || isset($producerTargetId) && $producerTargetId == $producer->id ? 'selected' : '' }}>
+                                                {{ $producer->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="model">{{ __('Dòng Xe') }}</label>
+                                    <select id="model" name="model" disabled class="form-control">
+                                        <option value="">{{ __('Tất Cả') }}</option>
+                                        {{--                                    @foreach($productModels as $model)--}}
+                                        {{--                                        <option value="{{ $model->id }}" {{ request()->input('model') == $model->id ? 'selected' : '' }}>--}}
+                                        {{--                                            {{ $model->name }}--}}
+                                        {{--                                        </option>--}}
+                                        {{--                                    @endforeach--}}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="category">{{ __('Danh Kiểu Dáng') }}</label>
+                                    <select id="category" name="category" class="form-control">
+                                        <option value="">{{ __('Tất Cả') }}</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}" {{ request()->input('category') == $category->id ? 'selected' : '' }}>
+                                                {{ $category->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="form-group col-6">
+                                        <label for="start_year">{{ __('Năm SX Từ') }}</label>
+                                        <select id="start_year" name="start_year" class="form-control">
+                                            <option value="">{{ __('---') }}</option>
+                                            @php
+                                                $currentYear = date('Y'); // Năm hiện tại
+                                                $startYear = 2000; // Năm bắt đầu
+                                            @endphp
+                                            @for ($year = $currentYear; $year >= $startYear; $year--)
+                                                <option value="{{ $year }}" {{ request()->input('start_year') == $year ? 'selected' : '' }}>
+                                                    {{ $year }}
+                                                </option>
+                                            @endfor
+                                        </select>
                                     </div>
-                                    <div class="text">
-                                        <h2 class="mb-0 product-title">
-                                            {{ $product->name }}
-                                        </h2>
-                                        <div class="mb-3">
-                                            <span class="cat">{{ $product->producer->name }}</span>
-                                            <p class="price">{{ $product->price }}</p>
+
+                                    <div class="form-group col-6">
+                                        <label for="end_year">{{ __('Đến Năm') }}</label>
+                                        <select id="end_year" name="end_year" class="form-control">
+                                            @php
+                                                // Đặt $endYear bằng năm hiện tại nếu không có giá trị từ người dùng
+                                                $endYear = request()->input('end_year', $currentYear);
+                                            @endphp
+                                            <option value="">
+                                                {{ __('---') }}
+                                            </option>
+                                            @for ($year = $currentYear; $year >= $startYear; $year--)
+                                                <option value="{{ $year }}" {{ $endYear == $year ? 'selected' : '' }}>
+                                                    {{ $year }}
+                                                </option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                    <span id="msg-year" style="color: red"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="checkbox" id="enable_price_range" name="enable_price_range" {{ request()->input('enable_price_range') ? 'checked' : '' }}>
+                                    <label for="enable_price_range">{{ __('Khoảng Giá') }}</label>
+                                    <div id="price_range_section" style="{{ request()->input('enable_price_range') ? '' : 'display: none;' }}">
+                                        <div id="price_range_slider"></div>
+                                        <div class="slider-labels">
+                                            <span id="label_min">{{ __('< 100tr') }}</span>
+                                            <span id="label_max">{{ __('> 2 Tỷ') }}</span>
                                         </div>
+                                        <input type="hidden" id="price_range_min" name="price_range_min" value="{{ request()->input('price_range_min', 20000000) }}">
+                                        <input type="hidden" id="price_range_max" name="price_range_max" value="{{ request()->input('price_range_max', 3100000000) }}">
                                     </div>
                                 </div>
-                            </a>
-                        </div>
-                    @endforeach
-                </div>
-            @else
-                <div class="text-center">
-                    <p style="color: #999999"><span>{{ __('Không Có Dữ Liệu') }}</span></p>
-                </div>
-            @endif
+                            </div>
 
-            <div class="row mt-5">
-                {{ $products->links('client.vendor.pagination.custom_panigation') }}
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label id="toggle-attributes" style="cursor: pointer; color: #01d28e;">{{ __('Lọc Theo Thuộc Tính') }}</label>
+                                    <ul class="attribute-list" id="attribute-list" style="display: none;"> <!-- Ẩn danh sách thuộc tính -->
+                                        @foreach($attributes as $attribute)
+                                            <li class="row" style="padding-left: 1.5%">
+                                                <label class="form-check-label" style="color: black">{{ $attribute->name }}</label> :
+                                                @foreach($attribute->spec as $spec)
+                                                    <div style="min-width: 100px; padding-left: 20px">
+                                                        <p>
+                                                            <input type="checkbox" class="form-check-input attribute-check visually-hidden" id="attribute_{{ $spec->id }}" name="spec[]" value="{{ $spec->id }}" {{ in_array($spec->id, request()->input('spec', [])) ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="attribute_{{ $spec->id }}">{{ $spec->value }}</label>
+                                                        </p>
+                                                    </div>
+                                                @endforeach
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn" style="background-color: #01d28e; color: #FFFFFF">{{ __('Tìm Kiếm') }}</button>
+                    </form>
+                </div>
+
+                <div class="result-search col-8">
+                    @if(isset($products) && count($products) > 0)
+                        <div class="row">
+                            @foreach($products as $product)
+                                <div class="col-4">
+                                    <a href="{{ route('product.detail', ['id' => $product->id]) }}">
+                                        <div class="car-wrap rounded ftco-animate">
+                                            <div class="img rounded d-flex align-items-end"
+                                                 style="background-image: url({{ asset($product->thumbnail) }});">
+                                            </div>
+                                            <div class="text">
+                                                <h2 class="mb-0 product-title">
+                                                    {{ $product->name }}
+                                                </h2>
+                                                <div class="mb-3">
+                                                    <span class="cat">{{ $product->producer->name }}</span>
+                                                    <p class="price">{{ $product->price }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center">
+                            <p style="color: #999999"><span>{{ __('Không Có Dữ Liệu') }}</span></p>
+                        </div>
+                    @endif
+
+                    <div class="row mt-5">
+                        {{ $products->links('client.vendor.pagination.custom_panigation') }}
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -596,6 +607,14 @@
             } else {
                 $('#price_range_section').hide();
             }
+        });
+
+        $('#fillter-form').on('change', 'input, select', function () {
+            $('#fillter-form').submit();
+        });
+
+        $('#price_range_slider').on('click', function() {
+            $('#fillter-form').submit();
         });
     </script>
 @stop

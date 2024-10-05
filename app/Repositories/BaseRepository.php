@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Repositories\RepositoryInterface;
+use Illuminate\Support\Facades\Storage;
 
 abstract class BaseRepository implements RepositoryInterface
 {
@@ -82,6 +83,17 @@ abstract class BaseRepository implements RepositoryInterface
         $image_url = $uploade_path.$image_full_name;
         $file->move($uploade_path,$image_full_name);
         return $image_url;
+    }
+
+    /**
+     * @param $file
+     * @return string
+     */
+    public function uploadFileToGoogleDrive($file) {
+        $filePath = $file->getClientOriginalName();
+        Storage::disk('google')->put($filePath, file_get_contents($file));
+        // Lấy URL của ảnh
+        return Storage::disk('google')->url($filePath);
     }
 
     /**

@@ -47,18 +47,18 @@
                             </div>
 
                             <div class="mb-3 text-center">
-                                <button type="submit" id="btn-login" class="btn btn-primary w-100">
+                                <button type="submit" id="btn-login" style="background-color: #01d28e; color: #FFFFFF" class="btn w-100">
                                     {{ __('Login') }}
                                 </button>
                             </div>
 
                             <div class="text-center">
                                 @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                                    <a class="btn btn-link" style="color:#01d28e;" href="{{ route('password.request') }}">
                                         {{ __('Quên Mật Khẩu?') }}
                                     </a>
                                 @endif
-                                <a class="btn btn-link" href="{{ route('register') }}">
+                                <a class="btn btn-link" style="color:#01d28e;" href="{{ route('register') }}">
                                     {{ __('Đăng Ký Tài Khoản') }}
                                 </a>
                             </div>
@@ -68,10 +68,10 @@
 
                         <div class="text-center">
                             <p>{{ __('Hoặc đăng nhập bằng') }}</p>
-                            <a href="{{ url('login/facebook') }}" class="btn btn-primary w-100 mb-2">
+                            <a href="{{ url('login/facebook') }}" class="btn btn-outline-primary w-100 mb-2">
                                 <i class="fab fa-facebook-f"></i> {{ __('Đăng nhập bằng Facebook') }}
                             </a>
-                            <a href="{{ route('login.google') }}" class="btn btn-danger w-100">
+                            <a href="{{ route('login.google') }}" class="btn btn-outline-danger w-100">
                                 <i class="fab fa-google"></i> {{ __('Đăng nhập bằng Google') }}
                             </a>
                         </div>

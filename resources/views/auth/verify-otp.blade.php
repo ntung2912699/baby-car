@@ -25,7 +25,7 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="otp" class="form-label">{{ __('Nhập Mã OTP') }}</label>
-                                <a class="btn btn-link" href="{{ route('resend-otp') }}">
+                                <a class="btn btn-link" style="color:#01d28e;" href="{{ route('resend-otp') }}">
                                     {{ __('Gửi Lại OTP') }}
                                 </a>
                                 <input id="otp" type="text" class="form-control @if ($errors->has('otp')) is-invalid @endif" name="otp" value="{{ old('otp') }}" autocomplete="off" autofocus>
@@ -38,10 +38,10 @@
 
                             <div class="mb-0">
                                 <div class="d-flex justify-content-between">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn" style="background-color: #01d28e; color: #FFFFFF">
                                         {{ __('Xác Thực') }}
                                     </button>
-                                    <a class="btn btn-link" href="{{ route('register') }}">
+                                    <a class="btn btn-link" style="color:#01d28e;" href="{{ route('register') }}">
                                         {{ __('Quay Lại') }}
                                     </a>
                                 </div>

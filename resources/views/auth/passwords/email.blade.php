@@ -31,10 +31,10 @@
 
                             <div class="mb-0">
                                 <div class="d-flex justify-content-between">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn" style="background-color: #01d28e; color: #FFFFFF">
                                         {{ __('Gửi Link Đặt Lại Mật Khẩu') }}
                                     </button>
-                                    <a class="btn btn-link" href="{{ route('login') }}">
+                                    <a class="btn btn-link" style="color: #01d28e" href="{{ route('login') }}">
                                         {{ __('Quay Lại') }}
                                     </a>
                                 </div>

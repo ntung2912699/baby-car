@@ -74,6 +74,10 @@ class HomeController extends Controller
     }
 
     public function contact() {
-        return view('client.page.contact');
+        try {
+            return view('client.page.contact');
+        } catch (\Exception $exception) {
+            return view('client.page.not-found');
+        }
     }
 }

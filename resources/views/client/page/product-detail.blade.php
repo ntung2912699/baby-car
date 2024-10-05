@@ -164,7 +164,9 @@
                         <ol class="carousel-indicators">
                             <li data-target="#productCarousel" data-slide-to="0" class="active"></li>
                             @foreach($gallery as $index => $image)
-                                <li data-target="#productCarousel" data-slide-to="{{ $index + 1 }}"></li>
+                                @if($image)
+                                    <li data-target="#productCarousel" data-slide-to="{{ $index + 1 }}"></li>
+                                @endif
                             @endforeach
                         </ol>
                         <div class="carousel-inner">
@@ -172,9 +174,11 @@
                                 <img class="d-block w-100" src="{{ asset($product->thumbnail) }}" alt="First slide">
                             </div>
                             @foreach($gallery as $image)
-                                <div class="carousel-item">
-                                    <img class="d-block w-100" src="{{ asset($image) }}" alt="Slide">
-                                </div>
+                                @if($image)
+                                    <div class="carousel-item">
+                                        <img class="d-block w-100" src="{{ asset($image) }}" alt="Slide">
+                                    </div>
+                                @endif
                             @endforeach
                         </div>
                         <a class="carousel-control-prev" href="#productCarousel" role="button" data-slide="prev">
@@ -256,7 +260,9 @@
                         <ol class="carousel-indicators">
                             <li data-target="#modalCarousel" data-slide-to="0" class="active"></li>
                             @foreach($gallery as $index => $image)
-                                <li data-target="#modalCarousel" data-slide-to="{{ $index + 1 }}"></li>
+                                @if($image)
+                                    <li data-target="#modalCarousel" data-slide-to="{{ $index + 1 }}"></li>
+                                @endif
                             @endforeach
                         </ol>
                         <div class="carousel-inner">
@@ -264,9 +270,11 @@
                                 <img class="d-block w-100" src="{{ asset($product->thumbnail) }}" alt="First slide">
                             </div>
                             @foreach($gallery as $image)
-                                <div class="carousel-item">
-                                    <img class="d-block w-100" src="{{ asset($image) }}" alt="Slide">
-                                </div>
+                                @if($image)
+                                    <div class="carousel-item">
+                                        <img class="d-block w-100" src="{{ asset($image) }}" alt="Slide">
+                                    </div>
+                                @endif
                             @endforeach
                         </div>
                         <a class="carousel-control-prev" href="#modalCarousel" role="button" data-slide="prev">

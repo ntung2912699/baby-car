@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header bg-primary text-white">{{ __('Đặt Lại Mật Khẩu') }}</div>
+                    <div class="card-header text-white" style="background-color: #01d28e; color: #FFFFFF">{{ __('Đặt Lại Mật Khẩu') }}</div>
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('password.update') }}">
@@ -39,7 +39,7 @@
                             </div>
 
                             <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn" style="background-color: #01d28e; color: #FFFFFF">
                                     {{ __('Xác Nhận') }}
                                 </button>
                             </div>

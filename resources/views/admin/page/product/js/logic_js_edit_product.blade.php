@@ -1314,7 +1314,9 @@
             success: function (response) {
                 loadingElement.style.display = 'none';
                 const data = response.data;
-                setGalleryImage(data.gallery);
+                if (data.gallery.length > 0) {
+                    setGalleryImage(data.gallery);
+                }
             },
             error: function(response) {
                 loadingElement.style.display = 'none';
@@ -1392,16 +1394,18 @@
             const assetPath = "{{ asset('') }}";
 
             for (var i = 0; i < filesArray.length; i++) {
-                const imageContainer = $('<div class="image-container"></div>');
-                const img = $('<img>').attr('src', assetPath + filesArray[i]);
-                const removeButton = $('<button type="button" class="remove-image">&times;</button>');
-                const urlTarget = filesArray[i];
-                removeButton.on('click', function() {
-                    deleteGallery(urlTarget);
-                });
+                if (filesArray[i]) {
+                    const imageContainer = $('<div class="image-container"></div>');
+                    const img = $('<img>').attr('src', assetPath + filesArray[i]);
+                    const removeButton = $('<button type="button" class="remove-image">&times;</button>');
+                    const urlTarget = filesArray[i];
+                    removeButton.on('click', function() {
+                        deleteGallery(urlTarget);
+                    });
 
-                imageContainer.append(img).append(removeButton);
-                $('#gallery-require').append(imageContainer);
+                    imageContainer.append(img).append(removeButton);
+                    $('#gallery-require').append(imageContainer);
+                }
             }
         }
 

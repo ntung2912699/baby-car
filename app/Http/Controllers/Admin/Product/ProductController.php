@@ -164,6 +164,7 @@ class ProductController extends Controller
                 $file = $request->file('thumbnail');
                 $source = 'upload/product/thumbnail/';
                 $file_name = $this->productRepository->upload($file, $source);
+//                $file_name = $this->productRepository->uploadFileToGoogleDrive($file);
                 $data['thumbnail'] = $file_name;
             }
             if ($request->hasFile('gallery')) {
@@ -171,6 +172,7 @@ class ProductController extends Controller
                 foreach ($request->file('gallery') as $file) {
                     $source = 'upload/product/gallery/';
                     $file_name = $this->productRepository->upload($file, $source);
+//                    $file_name = $this->productRepository->uploadFileToGoogleDrive($file);
                     $galleryList[] = $file_name;
                 }
                 $data['gallery'] = implode('|', $galleryList);
@@ -264,6 +266,7 @@ class ProductController extends Controller
                 $file = $request->file('thumbnail');
                 $source = 'upload/product/thumbnail/';
                 $file_name = $this->productRepository->upload($file, $source);
+//                $file_name = $this->productRepository->uploadFileToGoogleDrive($file);
                 $data['thumbnail'] = $file_name;
             } else {
                 $data['thumbnail'] = $productTarget->thumbnail;
@@ -273,6 +276,7 @@ class ProductController extends Controller
                 foreach ($request->file('gallery') as $file) {
                     $source = 'upload/product/gallery/';
                     $file_name = $this->productRepository->upload($file, $source);
+//                    $file_name = $this->productRepository->uploadFileToGoogleDrive($file);
                     $galleryList[] = $file_name;
                 }
                 $galleryOld = explode('|', $productTarget->gallery);
@@ -457,6 +461,9 @@ class ProductController extends Controller
             });
             // Nối lại thành chuỗi
             $product->gallery = implode('|', $galleryArray);
+            if ($product->gallery === '|') {
+                $product->gallery = '';
+            }
 
             // Lưu thay đổi
             $product->save();

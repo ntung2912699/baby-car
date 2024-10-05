@@ -15,7 +15,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .card-header {
-            background-color: #007bff;
+            background-color: #01d28e;
             color: white;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
@@ -23,25 +23,26 @@
             padding: 1rem;
         }
         .card-body {
-            padding: 2rem;
+            background-color: #f8f9fa;
+            padding: 1rem;
         }
         .card-body h2 {
             font-size: 2.5rem;
             font-weight: bold;
-            margin: 1.5rem 0;
-            color: #007bff;
+            margin: 1rem 0;
+            color: #01d28e;
         }
         .card-footer {
             background-color: #f8f9fa;
             border-top: none;
-            padding: 1.5rem;
+            padding: 1rem;
             font-size: 0.875rem;
             border-bottom-left-radius: 10px;
             border-bottom-right-radius: 10px;
             color: #6c757d;
         }
         .card-footer a {
-            color: #007bff;
+            color: #01d28e;
             text-decoration: none;
         }
         .card-footer a:hover {

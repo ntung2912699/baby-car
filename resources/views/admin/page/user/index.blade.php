@@ -152,9 +152,9 @@
                                                                onclick="EditUser({{ $user->id }}, '{{ $user->name }}', '{{ $user->email }}', '{{ $roles }}', '{{ $user->roles_id }}')"></i>
                                                         </button>
                                                         <button type="button" data-bs-toggle="tooltip" title=""
-                                                                class="btn btn-link btn-danger" data-original-title="Remove">
-                                                            <i class="fa fa-times"
-                                                               onclick="DeleteUser({{ $user->id }})"></i>
+                                                                class="btn btn-link btn-danger" data-original-title="Remove"
+                                                                onclick="DeleteUser({{ $user->id }})">
+                                                            <i class="fa fa-times"></i>
                                                         </button>
                                                     </div>
                                                 </td>
