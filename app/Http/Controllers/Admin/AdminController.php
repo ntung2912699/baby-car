@@ -13,6 +13,9 @@ use App\Repositories\Product\ProductRepository;
 use App\Repositories\ProductAttribute\ProductAttributeRepository;
 use App\Repositories\Status\StatusRepository;
 use Illuminate\Http\Request;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use Illuminate\Support\Carbon;
 
 class AdminController extends Controller
 {
@@ -104,5 +107,15 @@ class AdminController extends Controller
             'productNewCount',
             'totalPrice'
         ));
+    }
+
+    public function checkSessionToken(Request $request) {
+        $user = auth('sanctum')->user();
+
+        if ($user) {
+            return response()->json(['status' => 'success', 'message' => 'Token hợp lệ.']);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Token không hợp lệ hoặc đã hết hạn.'], 401);
+        }
     }
 }

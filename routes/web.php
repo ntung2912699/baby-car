@@ -22,6 +22,12 @@ Route::middleware(['check-admin-login'])->group(function () {
     Route::get('/admin/facebook-products/{id}', [\App\Http\Controllers\Social\FacebookApp\FacebookIntegrationController::class, 'show'])->name('facebook-show-product');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::post('/profile-update', [\App\Http\Controllers\Client\ClientController::class, 'updateUserProfile'])->name('user-profile-update');
+    Route::get('/user-profile', [\App\Http\Controllers\Client\ClientController::class, 'userProfile'])->name('user-profile');
+    Route::post('/password-update', [\App\Http\Controllers\Client\ClientController::class, 'updateUserPassword'])->name('user-password-update');
+});
+
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // Routes cho đăng nhập bằng Facebook

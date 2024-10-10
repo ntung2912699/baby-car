@@ -29,6 +29,9 @@
         <!-- Footer -->
         @include('admin.layout_admin.component_layout.footer')
     </div>
+    <form method="POST" id="logout-form" action="{{ route('logout') }}">
+        @csrf
+    </form>
 
     <!-- Custom template | don't include it in your project! -->
 {{--    @include('admin.layout_admin.component_layout.custom_template')--}}
@@ -105,6 +108,69 @@
                     parentCollapse.addClass('show');
                     parentNavItem.find('a').attr('aria-expanded', 'true');
                 }
+            });
+        }
+
+        const accessToken = '{{ session('jwt_token') }}';
+
+        if (accessToken) {
+            $.ajax({
+                url: "{{ route('api.session-check') }}",
+                type: "POST",
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken  // Thêm token vào header Authorization
+                },
+                cache: false,
+                dataType: 'json',
+                success: function (response) {
+                    if(response.status === 'success'){
+                        {{--// Token hợp lệ, tiếp tục truy cập--}}
+                        {{--swal("{{ trans('Success') }}!", response.message, {--}}
+                        {{--    icon: "success",--}}
+                        {{--    buttons: {--}}
+                        {{--        confirm: {--}}
+                        {{--            className: "btn btn-success",--}}
+                        {{--        },--}}
+                        {{--    },--}}
+                        {{--});--}}
+                    } else {
+                        // Token hết hạn hoặc không hợp lệ, logout
+                        swal("{{ trans('Error') }}!", response.message, {
+                            icon: "error",
+                            buttons: {
+                                confirm: {
+                                    className: "btn btn-danger",
+                                },
+                            },
+                        }).then((OK) => {
+                            $('#logout-form').submit();
+                        });
+                    }
+                },
+                error: function(error) {
+                    swal("{{ trans('Error') }}!", "Token không hợp lệ hoặc đã hết hạn.", {
+                        icon: "error",
+                        buttons: {
+                            confirm: {
+                                className: "btn btn-danger",
+                            },
+                        },
+                    }).then((OK) => {
+                        $('#logout-form').submit();
+                    });
+                }
+            });
+        } else {
+            // Nếu không có token, người dùng sẽ bị logout
+            swal("{{ trans('Error') }}!", "Không tìm thấy Token xác thực. Vui lòng đăng nhập và thử lại", {
+                icon: "error",
+                buttons: {
+                    confirm: {
+                        className: "btn btn-danger",
+                    },
+                },
+            }).then((OK) => {
+                $('#logout-form').submit();
             });
         }
     });

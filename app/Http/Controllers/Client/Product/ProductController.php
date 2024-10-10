@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductModel;
 use App\Repositories\Attribute\AttributeRepository;
+use App\Repositories\AttributeSpec\AttributeSpecRepository;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Producer\ProducerRepository;
 use App\Repositories\Product\ProductRepository;
@@ -45,19 +46,26 @@ class ProductController extends Controller
     protected $attributeRepository;
 
     /**
+     * @var AttributeSpecRepository
+     */
+    protected $attributeSpecRepository;
+
+    /**
      * ProductController constructor.
      * @param ProductRepository $productRepository
      * @param ProducerRepository $producerRepository
      * @param CategoryRepository $categoryRepository
      * @param AttributeRepository $attributeRepository
      * @param ProductModelRepository $productModelRepository
+     * @param AttributeSpecRepository $attributeSpecRepository
      */
     public function __construct(
         ProductRepository $productRepository,
         ProducerRepository $producerRepository,
         CategoryRepository $categoryRepository,
         AttributeRepository $attributeRepository,
-        ProductModelRepository $productModelRepository
+        ProductModelRepository $productModelRepository,
+        AttributeSpecRepository $attributeSpecRepository
     )
     {
         $this->productRepository = $productRepository;
@@ -65,6 +73,7 @@ class ProductController extends Controller
         $this->categoryRepository = $categoryRepository;
         $this->attributeRepository = $attributeRepository;
         $this->productModelRepository = $productModelRepository;
+        $this->attributeSpecRepository = $attributeSpecRepository;
     }
 
     /**
@@ -79,11 +88,13 @@ class ProductController extends Controller
             $attributeByProduct = $product->spec;
             $gallery = explode('|', $product->gallery);
             $relateProduct = $this->productRepository->relateProduct($product);
+            $relateProductByProducer = $this->productRepository->relateProductByProducer($product);
             return view('client.page.product-detail', compact(
                 'product',
                 'attributeByProduct',
                 'gallery',
-                'relateProduct'
+                'relateProduct',
+                'relateProductByProducer'
             ));
         } catch (\Exception $exception) {
             return view('client.page.not-found');
@@ -102,13 +113,15 @@ class ProductController extends Controller
             $producers = $this->producerRepository->getAll();
             $attributes = $this->attributeRepository->getAll();
             $productModels = $this->productModelRepository->getAll();
+            $stringSearch = $query;
             return view('client.page.product-list', compact(
                 'products',
                 'query',
                 'categories',
                 'producers',
                 'attributes',
-                'productModels'
+                'productModels',
+                'stringSearch'
             ));
         } catch (\Exception $exception) {
             return view('client.page.not-found');
@@ -128,6 +141,7 @@ class ProductController extends Controller
             $attributes = $this->attributeRepository->getAll();
             $productModels = $this->productModelRepository->getAll();
             $producerTargetId = $id;
+            $stringSearch = $producerTarget->name;
             return view('client.page.product-list', compact(
                 'products',
                 'producerTarget',
@@ -135,7 +149,8 @@ class ProductController extends Controller
                 'producers',
                 'attributes',
                 'producerTargetId',
-                'productModels'
+                'productModels',
+                'stringSearch'
             ));
         } catch (\Exception $exception) {
             return view('client.page.not-found');
@@ -152,12 +167,14 @@ class ProductController extends Controller
             $producers = $this->producerRepository->getAll();
             $attributes = $this->attributeRepository->getAll();
             $productModels = $this->productModelRepository->getAll();
+            $stringSearch = "";
             return view('client.page.product-list', compact(
                 'products',
                 'categories',
                 'producers',
                 'attributes',
-                'productModels'
+                'productModels',
+                'stringSearch'
             ));
         } catch (\Exception $exception) {
             return view('client.page.not-found');
@@ -177,8 +194,12 @@ class ProductController extends Controller
                 'price_range_max' => $enablePriceRange?$request->input('price_range_max'):null,
                 'start_year' => $request->input('start_year'),
                 'end_year' => $request->input('end_year'),
-                'spec' => $request->input('spec', [])
+                'spec' => array_filter($request->input('spec', []), function($value) {
+                    return !is_null($value);
+                })
             ];
+
+            $stringSearch = $this->buildStringSearch($filters);
 
             // Sử dụng repository để tìm kiếm
             $products = $this->productRepository->search($filters);
@@ -206,11 +227,71 @@ class ProductController extends Controller
                 'start_year' => $filters['start_year'],
                 'end_year' => $filters['end_year'],
                 'spec' => $filters['spec'],
-                'productModels' => $productModels
+                'productModels' => $productModels,
+                'stringSearch' => $stringSearch
             ]);
         } catch (\Exception $exception) {
             return view('client.page.not-found');
         }
+    }
+
+    /**
+     * @param $param
+     * @return string
+     */
+    private function buildStringSearch($param) {
+        $queryString = "";
+        if ($param['producer']) {
+            $name = $this->producerRepository->find($param['producer'])->name;
+            $queryString = $queryString != ""?$queryString.' > '.$name:$queryString.$name;
+        }
+        if ($param['category']) {
+            $name = $this->categoryRepository->find($param['category'])->name;
+            $queryString = $queryString != ""?$queryString.' > '.$name:$queryString.$name;
+        }
+        if ($param['model']) {
+            $name = $this->productModelRepository->find($param['model'])->name;
+            $queryString = $queryString != ""?$queryString.' > '.$name:$queryString.$name;
+        }
+        if ($param['query']) {
+            $queryString = $queryString != ""?$queryString.' > '.$param['query']:$queryString.$param['query'];
+        }
+        if ($param['price_range_min'] && $param['price_range_max']) {
+            $price_min = number_format($param['price_range_min'], 0, ',', '.') . ' ₫';
+            $price_max = number_format($param['price_range_max'], 0, ',', '.') . ' ₫';
+            $queryString = $queryString != ""?
+                $queryString.' > '.$price_min.' - '.$price_max
+                :$queryString.$price_min.' - '.$price_max;
+        }
+        if ($param['price_range_min'] && !$param['price_range_max']) {
+            $price_min = number_format($param['price_range_min'], 0, ',', '.') . ' ₫';
+            $queryString = $queryString != ""?$queryString.' > '.$price_min:$queryString.$price_min;
+        }
+        if ($param['price_range_max'] && !$param['price_range_min']) {
+            $price_max = number_format($param['price_range_max'], 0, ',', '.') . ' ₫';
+            $queryString = $queryString != ""?$queryString.' > '.$price_max:$queryString.$price_max;
+        }
+        if ($param['start_year'] && $param['end_year']) {
+            $queryString = $queryString != ""?
+                $queryString.' > '.$param['start_year'].' - '.$param['end_year']
+                :$queryString.$param['start_year'].' - '.$param['end_year'];
+        }
+        if ($param['start_year'] && !$param['end_year']) {
+            $queryString = $queryString != ""?$queryString.' > '.$param['start_year']:$queryString.$param['start_year'];
+        }
+        if ($param['end_year'] && !$param['start_year']) {
+            $queryString = $queryString != ""?$queryString.' > '.$param['end_year']:$queryString.$param['end_year'];
+        }
+        if (count($param['spec'])) {
+            foreach ($param['spec'] as $item) {
+                if (!empty($item)) {
+                    $name = $this->attributeSpecRepository->find($item)->value;
+                    $queryString = $queryString != ""?$queryString.' > '.$name:$queryString.$name;
+                }
+            }
+        }
+
+        return $queryString;
     }
 
     /**

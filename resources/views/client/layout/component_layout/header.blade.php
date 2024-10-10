@@ -88,6 +88,7 @@
                             Xin chào, {{ Auth::user()->name }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="{{ route('user-profile') }}">{{__('Thông Tin Cá Nhân')}}</a>
                             @if(Auth::user()->roles_id != 1)
                                 <a class="dropdown-item" href="{{ route('admin.index') }}">{{ 'Trang Quản Trị' }}</a>
                             @endif

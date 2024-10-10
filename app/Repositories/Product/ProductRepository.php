@@ -44,6 +44,22 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     }
 
     /**
+     * @param Product $product
+     * @return mixed
+     */
+    public function relateProductByProducer(Product $product)
+    {
+        $producerId = $product->producer_id;
+        return $this->model
+            ->where(function ($query) use ($producerId) {
+                $query->where('producer_id', $producerId);
+            })
+            ->where('id', '!=', $product->id) // Loại trừ sản phẩm hiện tại
+            ->take(3) // Hoặc sử dụng ->limit(3) để giới hạn số lượng kết quả
+            ->get();
+    }
+
+    /**
      * Tìm kiếm sản phẩm theo từ khóa.
      *
      * @param string $query
@@ -84,6 +100,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             $query->where('name', 'LIKE', '%' . $filters['query'] . '%');
         }
 
+        // Tìm kiếm theo nhà sản xuất
         if (!empty($filters['producer'])) {
             $query->where('producer_id', $filters['producer']);
         }
@@ -99,7 +116,6 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         // Chuyển đổi giá trị tiền tệ thành số
         function parsePrice($price)
         {
-            // Loại bỏ ký tự không phải số
             return (float) str_replace(['.', 'đ'], '', $price);
         }
 
@@ -110,23 +126,30 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         // Tìm kiếm theo khoảng giá
         if ($priceRangeMin !== null && $priceRangeMax !== null) {
             if ($priceRangeMax > self::MAX_PRICE) {
-                // Nếu max_price > 3 tỷ, tìm các sản phẩm có giá lớn hơn 3 tỷ
                 $query->whereRaw('CAST(REPLACE(REPLACE(price, ".", ""), "đ", "") AS DECIMAL(20,2)) >= ?', [$priceRangeMin]);
             } else {
-                // Tìm trong khoảng giá
                 $query->whereRaw('CAST(REPLACE(REPLACE(price, ".", ""), "đ", "") AS DECIMAL(20,2)) BETWEEN ? AND ?', [$priceRangeMin, $priceRangeMax]);
             }
+        }
+
+        // Gộp điều kiện cho các thuộc tính spec
+        if (!empty($filters['spec']) ) {
+            $query->whereHas('spec', function($subQuery) use ($filters) {
+                $subQuery->whereIn('attribute_spec.id', $filters['spec']);
+            });
         }
 
         if (!empty($filters['start_year']) && !empty($filters['end_year'])) {
             $query->whereHas('spec', function($subQuery) use ($filters) {
                 $subQuery->whereBetween('value', [$filters['start_year'], $filters['end_year']]);
             });
-        }
-
-        if (!empty($filters['spec'])) {
+        } elseif (!empty($filters['start_year'])) {
             $query->whereHas('spec', function($subQuery) use ($filters) {
-                $subQuery->whereIn('attribute_spec.id', $filters['spec']);
+                $subQuery->where('value', '>=', $filters['start_year']);
+            });
+        } elseif (!empty($filters['end_year'])) {
+            $query->whereHas('spec', function($subQuery) use ($filters) {
+                $subQuery->where('value', '<=', $filters['end_year']);
             });
         }
 

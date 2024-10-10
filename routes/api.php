@@ -56,4 +56,5 @@ Route::middleware('auth:sanctum')->group( function () {
 });
 
 Route::get('/product-models-client/{producerId}', [\App\Http\Controllers\Client\Product\ProductController::class, 'getProductModels'])->name('model-client.get-by-producer');
+Route::post('/admin/check-token', [\App\Http\Controllers\Admin\AdminController::class, 'checkSessionToken'])->name('api.session-check');
 

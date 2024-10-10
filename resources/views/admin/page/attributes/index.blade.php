@@ -206,7 +206,7 @@
                                                         </button>
                                                         <a type="button" href="{{ route('spec.index', ['id' => $attribute->id]) }}" data-bs-toggle="tooltip" title=""
                                                                 class="btn btn-link btn-secondary" data-original-title="More">
-                                                            <i class="fas fa-expand"></i>
+                                                            <i class="fas fa-folder-open"></i>
                                                         </a>
                                                     </div>
                                                 </td>

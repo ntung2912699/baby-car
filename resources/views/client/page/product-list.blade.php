@@ -156,17 +156,64 @@
             margin: 0 auto; /* Căn giữa container */
         }
 
+        @media (max-width: 768px) {
+            .filter-section {
+                left: -100%; /* Ẩn filter */
+            }
+
+            .filter-section {
+                position: fixed; /* Hoặc absolute nếu phù hợp */
+                left: -100%; /* Đẩy filter ra khỏi màn hình khi ẩn */
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: white; /* Hoặc màu bạn mong muốn */
+                transition: left 0.3s ease; /* Giúp filter trượt ra mềm mại */
+                z-index: 9999; /* Đảm bảo filter nằm trên các thành phần khác */
+                overflow-y: auto;
+            }
+
+            .filter-section.active {
+                left: 0 !important;
+                /*width: 90% !important;*/
+            }
+
+            #filter-icon {
+                display: block;
+                position: fixed;
+                text-align: center;
+                width: 50px;
+                top: 8%;
+                left: 2%;
+                z-index: 10000;
+                background-color: #01d28e;
+                color: white;
+                padding: 10px;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+        }
+
+        @media (min-width: 769px) {
+            #filter-icon {
+                display: none;
+            }
+        }
+
     </style>
 
     <section class="ftco-section bg-light">
         <div class="custom-container">
+            <div id="filter-icon">
+                <i class="fas fa-filter"></i> <!-- Font Awesome icon -->
+            </div>
             <div class="row">
-                <div class="filter-section col-4">
+                <div class="filter-section col-md-4">
                     <div class="row">
-                        <div class="col-7">
+                        <div class="col-md-7">
                             <h3 class="mb-4">{{ __('Bộ Lọc') }}</h3>
                         </div>
-                        <div class="col-5" style="text-align: right">
+                        <div class="col-md-5" style="text-align: right">
                             <a href="#" id="reset-filters">{{ __('Xóa Bộ Lọc') }}</a>
                         </div>
                     </div>
@@ -245,7 +292,8 @@
                                         <select id="end_year" name="end_year" class="form-control">
                                             @php
                                                 // Đặt $endYear bằng năm hiện tại nếu không có giá trị từ người dùng
-                                                $endYear = request()->input('end_year', $currentYear);
+                                                //$endYear = request()->input('end_year', $currentYear);
+                                                $endYear = request()->input('end_year', '');
                                             @endphp
                                             <option value="">
                                                 {{ __('---') }}
@@ -280,33 +328,47 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label id="toggle-attributes" style="cursor: pointer; color: #01d28e;">{{ __('Lọc Theo Thuộc Tính') }}</label>
-                                    <ul class="attribute-list" id="attribute-list" style="display: none;"> <!-- Ẩn danh sách thuộc tính -->
+                                    <ul class="attribute-list" id="attribute-list" style="display: none;">
                                         @foreach($attributes as $attribute)
-                                            <li class="row" style="padding-left: 1.5%">
-                                                <label class="form-check-label" style="color: black">{{ $attribute->name }}</label> :
-                                                @foreach($attribute->spec as $spec)
+                                            <li style="padding-left: 1.5%">
+                                                <div class="row" style="margin: 0">
+                                                    <label class="form-check-label" style="color: black">{{ $attribute->name }}</label> :
+                                                    <!-- Thêm radio "Tất cả" -->
                                                     <div style="min-width: 100px; padding-left: 20px">
                                                         <p>
-                                                            <input type="checkbox" class="form-check-input attribute-check visually-hidden" id="attribute_{{ $spec->id }}" name="spec[]" value="{{ $spec->id }}" {{ in_array($spec->id, request()->input('spec', [])) ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="attribute_{{ $spec->id }}">{{ $spec->value }}</label>
+                                                            <input type="radio" class="form-check-input attribute-check visually-hidden" id="attribute_all_{{ $attribute->id }}" name="spec[{{ $attribute->id }}]" value="" {{ request()->input('spec.'.$attribute->id) === null ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="attribute_all_{{ $attribute->id }}">Tất cả</label>
                                                         </p>
                                                     </div>
-                                                @endforeach
+
+                                                    <!-- Vòng lặp qua các spec -->
+                                                    @foreach($attribute->spec as $spec)
+                                                        <div style="min-width: 100px; padding-left: 20px">
+                                                            <p>
+                                                                <input type="radio" class="form-check-input attribute-check visually-hidden" id="attribute_{{ $spec->id }}" name="spec[{{ $attribute->id }}]" value="{{ $spec->id }}" {{ in_array($spec->id, request()->input('spec', [])) ? 'checked' : '' }}>
+                                                                <label class="form-check-label" for="attribute_{{ $spec->id }}">{{ $spec->value }}</label>
+                                                            </p>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             </li>
                                         @endforeach
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn" style="background-color: #01d28e; color: #FFFFFF">{{ __('Tìm Kiếm') }}</button>
+                        <button type="submit" id="btn-search" class="btn" style="background-color: #01d28e; color: #FFFFFF">{{ __('Tìm Kiếm') }}</button>
                     </form>
                 </div>
 
-                <div class="result-search col-8">
+                <div class="result-search col-md-8">
+                    @if(isset($stringSearch) && $stringSearch != "")
+                        <h5>{{ __('Kết quả cho: ') }} <span style="color: #1089ff">{{ $stringSearch }}</span></h5>
+                    @endif
                     @if(isset($products) && count($products) > 0)
                         <div class="row">
                             @foreach($products as $product)
-                                <div class="col-4">
+                                <div class="col-md-6">
                                     <a href="{{ route('product.detail', ['id' => $product->id]) }}">
                                         <div class="car-wrap rounded ftco-animate">
                                             <div class="img rounded d-flex align-items-end"
@@ -376,18 +438,12 @@
             // Xóa thông báo cũ
             msgYear.innerHTML = '';
 
-            // Kiểm tra và hiển thị thông báo nếu năm bắt đầu không hợp lệ
-            if (!startYear && endYear) {
-                $('#start_year').css('border', '1px solid red');
-                msgYear.innerHTML = '{{ __('Vui lòng nhập năm bắt đầu') }}';
-            } else {
-                $('#start_year').css('border', '1px solid #ddd');
-            }
-
             // Kiểm tra và hiển thị thông báo nếu năm kết thúc không hợp lệ
             if (!endYear && startYear) {
                 $('#end_year').css('border', '1px solid red');
                 msgYear.innerHTML = '{{ __('Vui lòng nhập năm kết thúc') }}';
+                $('#btn-search').attr('disabled', true);
+                return;
             } else {
                 $('#end_year').css('border', '1px solid #ddd');
             }
@@ -398,6 +454,8 @@
                 $('#start_year').css('border', '1px solid red');
                 $('#end_year').css('border', '1px solid red');
                 document.getElementById('end_year').value = ''; // Reset giá trị năm kết thúc
+                $('#btn-search').attr('disabled', true);
+                return;
             }
 
             // Nếu tất cả đều hợp lệ
@@ -406,6 +464,8 @@
                 $('#end_year').css('border', '1px solid #ddd');
                 msgYear.innerHTML = '';
             }
+
+            $('#btn-search').removeAttr('disabled'); // Kích hoạt lại nút tìm kiếm khi dữ liệu hợp lệ
         }
 
 
@@ -610,11 +670,78 @@
         });
 
         $('#fillter-form').on('change', 'input, select', function () {
+            const startYear = parseInt(document.getElementById('start_year').value);
+            const endYear = parseInt(document.getElementById('end_year').value);
+            const msgYear = document.getElementById('msg-year');
+
+            // Xóa thông báo cũ
+            msgYear.innerHTML = '';
+            if (!endYear && startYear) {
+                $('#end_year').css('border', '1px solid red');
+                msgYear.innerHTML = '{{ __('Vui lòng nhập năm kết thúc') }}';
+                $('#btn-search').attr('disabled', true);
+                return;
+            } else {
+                $('#end_year').css('border', '1px solid #ddd');
+            }
+
+            // Kiểm tra nếu năm bắt đầu lớn hơn năm kết thúc
+            if (startYear && endYear && startYear > endYear) {
+                msgYear.innerHTML = '{{ __('Năm bắt đầu không thể lớn hơn năm kết thúc.') }}';
+                $('#start_year').css('border', '1px solid red');
+                $('#end_year').css('border', '1px solid red');
+                document.getElementById('end_year').value = ''; // Reset giá trị năm kết thúc
+                $('#btn-search').attr('disabled', true);
+                return;
+            }
+
+            // Nếu tất cả đều hợp lệ
+            if (startYear && endYear && startYear <= endYear) {
+                $('#start_year').css('border', '1px solid #ddd');
+                $('#end_year').css('border', '1px solid #ddd');
+                msgYear.innerHTML = '';
+            }
             $('#fillter-form').submit();
         });
 
         $('#price_range_slider').on('click', function() {
+            const startYear = parseInt(document.getElementById('start_year').value);
+            const endYear = parseInt(document.getElementById('end_year').value);
+            const msgYear = document.getElementById('msg-year');
+
+            // Xóa thông báo cũ
+            msgYear.innerHTML = '';
+            if (!endYear && startYear) {
+                $('#end_year').css('border', '1px solid red');
+                msgYear.innerHTML = '{{ __('Vui lòng nhập năm kết thúc') }}';
+                $('#btn-search').attr('disabled', true);
+                return;
+            } else {
+                $('#end_year').css('border', '1px solid #ddd');
+            }
+
+            // Kiểm tra nếu năm bắt đầu lớn hơn năm kết thúc
+            if (startYear && endYear && startYear > endYear) {
+                msgYear.innerHTML = '{{ __('Năm bắt đầu không thể lớn hơn năm kết thúc.') }}';
+                $('#start_year').css('border', '1px solid red');
+                $('#end_year').css('border', '1px solid red');
+                document.getElementById('end_year').value = ''; // Reset giá trị năm kết thúc
+                $('#btn-search').attr('disabled', true);
+                return;
+            }
+
+            // Nếu tất cả đều hợp lệ
+            if (startYear && endYear && startYear <= endYear) {
+                $('#start_year').css('border', '1px solid #ddd');
+                $('#end_year').css('border', '1px solid #ddd');
+                msgYear.innerHTML = '';
+            }
             $('#fillter-form').submit();
         });
+
+        document.getElementById('filter-icon').addEventListener('click', function () {
+            document.querySelector('.filter-section').classList.toggle('active');
+        });
+
     </script>
 @stop

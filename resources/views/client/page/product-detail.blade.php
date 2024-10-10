@@ -146,6 +146,31 @@
                 margin: auto; /* Đảm bảo modal nằm ở giữa màn hình */
             }
         }
+
+        .zoomable {
+            cursor: grab; /* Hiển thị con trỏ khi di chuột lên hình ảnh */
+            transition: transform 0.1s ease; /* Hiệu ứng chuyển động khi zoom */
+        }
+
+        .image-container {
+            overflow: hidden; /* Giới hạn hình ảnh trong khung */
+            position: relative; /* Để có thể kéo hình ảnh */
+        }
+
+        .modal {
+            overflow: hidden; /* Ngăn không cho ảnh tràn ra ngoài modal */
+        }
+
+        .modal-content {
+            padding: 0; /* Không có padding để ảnh không bị giãn cách */
+        }
+
+        .modal-body {
+            display: flex;
+            justify-content: center; /* Căn giữa nội dung modal */
+            align-items: center; /* Căn giữa theo chiều dọc */
+        }
+
     </style>
 
     <section class="ftco-section ftco-car-details">
@@ -197,7 +222,7 @@
                     <div class="car-details-text">
                         <div class="row">
                             @foreach($attributeByProduct as $attr)
-                                <div class="col-md-6">
+                                <div class="col-md-6 col-sm-6">
                                     <div class="attribute-card">
                                         <div class="attribute-content">
                                             <h5 class="attribute-name">
@@ -216,7 +241,7 @@
             </div>
         </div>
         @if(count($relateProduct) > 0)
-            <section class="ftco-section ftco-no-pt" style="padding-top: 20px">
+            <section class="ftco-section ftco-no-pt" style="padding: 20px !important">
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-md-12 heading-section text-center ftco-animate mb-5">
@@ -225,6 +250,40 @@
                     </div>
                     <div class="row">
                         @foreach($relateProduct as $item)
+                            <div class="col-md-3">
+                                <a href="{{ route('product.detail', ['id' => $item->id]) }}">
+                                    <div class="car-wrap rounded ftco-animate">
+                                        <div class="img rounded d-flex align-items-end"
+                                             style="background-image: url({{ asset($item->thumbnail) }});">
+                                        </div>
+                                        <div class="text">
+                                            <h2 class="mb-0 product-title">
+                                                {{ $item->name }}
+                                            </h2>
+                                            <div class="mb-3">
+                                                <span class="cat">{{ $item->producer->name }}</span>
+                                                <p class="price">{{ $item->price }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </section>
+        @endif
+
+        @if(count($relateProductByProducer) > 0)
+            <section class="ftco-section" style="padding: 20px !important">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+                            <h2 class="mb-2">{{ __('Có Thể Bạn Quan Tâm') }}</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @foreach($relateProductByProducer as $item)
                             <div class="col-md-3">
                                 <a href="{{ route('product.detail', ['id' => $item->id]) }}">
                                     <div class="car-wrap rounded ftco-animate">
@@ -267,12 +326,12 @@
                         </ol>
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img class="d-block w-100" src="{{ asset($product->thumbnail) }}" alt="First slide">
+                                <img class="d-block w-100 zoomable" src="{{ asset($product->thumbnail) }}" alt="First slide">
                             </div>
                             @foreach($gallery as $image)
                                 @if($image)
                                     <div class="carousel-item">
-                                        <img class="d-block w-100" src="{{ asset($image) }}" alt="Slide">
+                                        <img class="d-block w-100 zoomable" src="{{ asset($image) }}" alt="Slide">
                                     </div>
                                 @endif
                             @endforeach
@@ -290,6 +349,126 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const zoomableImages = document.querySelectorAll('.zoomable');
+            let scale = 1;
+            let isDragging = false;
+            let startX, startY;
+            let currentX = 0;
+            let currentY = 0;
+            const dragSensitivity = 1; // Tăng độ nhạy kéo
+            const maxScale = 3; // Tỷ lệ zoom tối đa
+
+            zoomableImages.forEach((img) => {
+                img.addEventListener('dblclick', () => {
+                    scale = scale === 1 ? maxScale : 1; // Toggle giữa zoom 1x và tỷ lệ zoom tối đa
+                    resetPosition(img); // Đặt lại vị trí khi zoom
+                    updateTransform(img);
+                });
+
+                img.addEventListener('dragstart', (e) => {
+                    e.preventDefault();
+                });
+
+                img.addEventListener('mousedown', (e) => {
+                    if (e.button === 0) {
+                        isDragging = true;
+                        startX = e.pageX - currentX;
+                        startY = e.pageY - currentY;
+                        img.style.cursor = 'grabbing';
+                    }
+                });
+
+                img.addEventListener('mouseleave', () => {
+                    isDragging = false;
+                    img.style.cursor = scale === 1 ? 'grab' : 'zoom-out';
+                });
+
+                img.addEventListener('mouseup', () => {
+                    isDragging = false;
+                    img.style.cursor = scale === 1 ? 'grab' : 'zoom-out';
+                });
+
+                img.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+
+                    e.preventDefault();
+                    const x = e.pageX;
+                    const y = e.pageY;
+                    currentX = (x - startX) * dragSensitivity; // Áp dụng độ nhạy kéo
+                    currentY = (y - startY) * dragSensitivity; // Áp dụng độ nhạy kéo
+
+                    limitDrag(img); // Giới hạn kéo
+                    updateTransform(img);
+                });
+
+                // Cập nhật vị trí và zoom của ảnh
+                function updateTransform(image) {
+                    image.style.transform = `translate(${currentX}px, ${currentY}px) scale(${scale})`;
+                }
+
+                function limitDrag(image) {
+                    const rect = image.getBoundingClientRect();
+                    const parentRect = image.parentElement.getBoundingClientRect(); // Kích thước container chứa ảnh
+
+                    // Giới hạn kéo ngang
+                    const maxX = (rect.width * scale - parentRect.width) / 2; // Tính khoảng cách tối đa có thể kéo
+                    currentX = Math.max(Math.min(currentX, maxX), -maxX);
+
+                    // Giới hạn kéo dọc
+                    const maxY = (rect.height * scale - parentRect.height) / 2; // Tính khoảng cách tối đa có thể kéo
+                    currentY = Math.max(Math.min(currentY, maxY), -maxY);
+                }
+
+                // Reset lại trạng thái ảnh
+                const resetPosition = () => {
+                    currentX = 0;
+                    currentY = 0;
+                    limitDrag(img); // Đảm bảo ảnh không bị kéo quá
+                    updateTransform(img);
+                };
+
+                // Khi load ảnh mới, reset lại zoom và vị trí
+                img.addEventListener('load', () => {
+                    scale = 1; // Reset lại zoom
+                    resetPosition(); // Đặt lại vị trí ảnh
+                    img.style.cursor = 'grab'; // Đặt lại con trỏ chuột
+                });
+
+                // Touch events cho thiết bị di động
+                let initialDistance = null;
+
+                img.addEventListener('touchstart', (e) => {
+                    if (e.touches.length === 2) {
+                        initialDistance = getDistance(e.touches);
+                        e.preventDefault();
+                    }
+                });
+
+                img.addEventListener('touchmove', (e) => {
+                    if (e.touches.length === 2 && initialDistance) {
+                        const currentDistance = getDistance(e.touches);
+                        scale = (currentDistance / initialDistance); // Tính tỷ lệ zoom
+                        scale = Math.min(scale, maxScale); // Giới hạn tỷ lệ zoom tối đa
+                        updateTransform(img);
+                        e.preventDefault();
+                    }
+                });
+
+                img.addEventListener('touchend', () => {
+                    initialDistance = null;
+                });
+            });
+
+            function getDistance(touches) {
+                const dx = touches[0].clientX - touches[1].clientX;
+                const dy = touches[0].clientY - touches[1].clientY;
+                return Math.sqrt(dx * dx + dy * dy);
+            }
+        });
+    </script>
 
     <script>
         $(document).ready(function () {
