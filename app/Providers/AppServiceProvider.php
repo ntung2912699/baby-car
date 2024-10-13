@@ -54,13 +54,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(UrlGenerator $url)
     {
-//        if (env('APP_ENV') == 'production') {
-//            URL::forceScheme('https');
-//        }
-//        if (app()->environment('production')) {
-//            if (strpos(request()->getHost(), 'ngrok.io') !== false) {
-//                URL::forceScheme('https');
-//            }
-//        }
+//        URL::forceScheme('https');
     }
 }
