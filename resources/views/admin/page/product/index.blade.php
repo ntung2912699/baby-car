@@ -151,36 +151,38 @@
                                         </thead>
                                         <tbody>
                                         @foreach($product_data as $product)
-                                            <tr role="row" class="odd">
-                                                <td class="text-start">{{ $product->id }}</td>
-                                                <td class="text-start">{{ $product->category->name }}</td>
-                                                <td class="text-start">{{ $product->producer->name }}</td>
-                                                <td class="text-start">{{ $product->model->name }}</td>
-                                                <td class="text-start">{{ $product->status->name }}</td>
-                                                <td class="text-start">
-                                                    <div class="avatar">
-                                                        <img src="{{ asset($product->thumbnail) }}" alt="..." class="avatar-img rounded-circle">
-                                                    </div>
-                                                    {{ $product->name }}
-                                                </td>
-                                                <td class="text-start">{{ $product->price }}</td>
-                                                <td class="text-start">{{ $product->created_at }}</td>
-                                                <td class="text-start">{{ $product->updated_at }}</td>
-                                                <td class="text-start">
-                                                    <div class="form-button-action">
-                                                        <a href="{{ route('product-form.edit', ['id' => $product->id ]) }}" type="button" data-bs-toggle="tooltip" title=""
-                                                                class="btn btn-link btn-primary btn-lg"
-                                                                data-original-title="Edit Task">
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
-                                                        <button type="button" data-bs-toggle="tooltip" title=""
-                                                                class="btn btn-link btn-danger" data-original-title="Remove">
-                                                            <i class="fa fa-times"
-                                                               onclick="DeleteProduct({{ $product->id }})"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            <a href="{{ route('product-form.edit', ['id' => $product->id ]) }}">
+                                                <tr role="row" class="odd">
+                                                    <td class="text-start">{{ $product->id }}</td>
+                                                    <td class="text-start">{{ $product->category->name }}</td>
+                                                    <td class="text-start">{{ $product->producer->name }}</td>
+                                                    <td class="text-start">{{ $product->model->name }}</td>
+                                                    <td class="text-start">{{ $product->status->name }}</td>
+                                                    <td class="text-start">
+                                                        <div class="avatar">
+                                                            <img src="{{ asset($product->thumbnail) }}" alt="..." class="avatar-img rounded-circle">
+                                                        </div>
+                                                        {{ $product->name }}
+                                                    </td>
+                                                    <td class="text-start">{{ $product->price }}</td>
+                                                    <td class="text-start">{{ $product->created_at }}</td>
+                                                    <td class="text-start">{{ $product->updated_at }}</td>
+                                                    <td class="text-start">
+                                                        <div class="form-button-action">
+                                                            <a href="{{ route('product-form.edit', ['id' => $product->id ]) }}" type="button" data-bs-toggle="tooltip" title=""
+                                                               class="btn btn-link btn-primary btn-lg"
+                                                               data-original-title="Edit Task">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                            <button type="button" data-bs-toggle="tooltip" title=""
+                                                                    class="btn btn-link btn-danger" data-original-title="Remove">
+                                                                <i class="fa fa-times"
+                                                                   onclick="DeleteProduct({{ $product->id }})"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </a>
                                         @endforeach
                                         </tbody>
                                     </table>
