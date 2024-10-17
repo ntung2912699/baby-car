@@ -348,7 +348,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm" style="background-color: #01d28e; color: #FFFFFF"><i class="fa fa-tag"></i></span>
                                                 </div>
-                                                <input type="text" class="form-control" onchange="caculateBank()" id="prepay" aria-label="" value="{{ number_format((int) str_replace(['.', ' VNĐ'], '', $product->price) / 2, 0, ',', '.') . ' VNĐ' }}" aria-describedby="inputGroup-sizing-sm">
+                                                <input type="text" class="form-control" onkeyup="caculateBank()" id="prepay" aria-label="" value="{{ number_format((int) str_replace(['.', ' VNĐ'], '', $product->price) / 2, 0, ',', '.') . ' VNĐ' }}" aria-describedby="inputGroup-sizing-sm">
                                             </div>
                                         </div>
                                     </div>
@@ -361,7 +361,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm" style="background-color: #01d28e; color: #FFFFFF"><i class="fa fa-piggy-bank"></i></span>
                                                 </div>
-                                                <input type="text" onchange="caculateBank()" class="form-control" id="interest-rate" aria-label="" value="8" aria-describedby="inputGroup-sizing-sm">
+                                                <input type="text" onkeyup="caculateBank()" class="form-control" id="interest-rate" aria-label="" value="8" aria-describedby="inputGroup-sizing-sm">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -827,26 +827,28 @@
             var prepay = $('#prepay').val();
             var interestRate = $('#interest-rate').val();
             var duration = $('#duration').val();
-            $.ajax({
-                url: '{{ route('api.calculate-bank') }}',
-                method: 'POST',
-                data: {
-                    priceTotal: priceTotal,
-                    prepay: prepay,
-                    interestRate: interestRate,
-                    duration: duration,
-                },
-                success: function(response) {
-                    $('#total-bank').empty(); // Xóa tổng cũ
-                    $('#total-origin').empty(); // Xóa tổng cũ
-                    $('#total-interest').empty(); // Xóa tổng cũ
+            if (priceTotal && prepay && interestRate && duration) {
+                $.ajax({
+                    url: '{{ route('api.calculate-bank') }}',
+                    method: 'POST',
+                    data: {
+                        priceTotal: priceTotal,
+                        prepay: prepay,
+                        interestRate: interestRate,
+                        duration: duration,
+                    },
+                    success: function(response) {
+                        $('#total-bank').empty(); // Xóa tổng cũ
+                        $('#total-origin').empty(); // Xóa tổng cũ
+                        $('#total-interest').empty(); // Xóa tổng cũ
 
-                    // Cập nhật tổng phí
-                    $('#total-bank').append(response.total);
-                    $('#total-origin').append(response.origin);
-                    $('#total-interest').append(response.interest);
-                }
-            });
+                        // Cập nhật tổng phí
+                        $('#total-bank').append(response.total);
+                        $('#total-origin').append(response.origin);
+                        $('#total-interest').append(response.interest);
+                    }
+                });
+            }
         }
 
         function formatCurrencyVND(number) {
