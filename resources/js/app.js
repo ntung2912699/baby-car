@@ -37,3 +37,18 @@ app.component('example-component', ExampleComponent);
  */
 
 app.mount('#app');
+
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+
+window.Pusher = Pusher;
+
+// Cấu hình Echo
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: '105962cddad10625281c', // Thay thế bằng APP_KEY của bạn
+    cluster: 'us2', // Thay thế bằng CLUSTER của bạn
+    encrypted: true
+});
+
+

@@ -74,6 +74,17 @@
                                     <span style="color: red" id="msg-price"></span>
                                 </div>
                                 <div class="form-group">
+                                    <label for="price">{{ __('Giá Nhập Sản Phẩm') }}</label><span style="color: red"> *</span><br>
+                                    <input type="text" class="form-control" name="cost_price"
+                                           @if ($product && isset($product->cost_price))
+                                           value="{{ old('cost_price', $product->cost_price) }}"
+                                           @else
+                                           value="{{ old('cost_price', "") }}"
+                                           @endif
+                                           id="cost_price" placeholder="{{ __('Nhập giá nhập sản phẩm') }}">
+                                    <span style="color: red" id="msg-cost_price"></span>
+                                </div>
+                                <div class="form-group">
                                     <label>{{ trans('Ảnh Chính Sản Phẩm') }}</label><span style="color: red"> *</span><br>
                                     <span style="color: red" id="msg-thumbnail"></span>
                                     <span id="msg-thumbnail" style="color: red"></span><br>

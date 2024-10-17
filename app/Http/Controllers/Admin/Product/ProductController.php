@@ -147,6 +147,7 @@ class ProductController extends Controller
             'status_id' => 'required',
             'name' => 'required|string|max:255',
             'price' => 'required|string|max:255',
+            'cost_price' => 'required|string|max:255',
             'thumbnail' => 'required',
             'gallery' => 'required',
             'description' => 'required',
@@ -177,6 +178,7 @@ class ProductController extends Controller
                 }
                 $data['gallery'] = implode('|', $galleryList);
             }
+            $data['sale_price'] = $request->get('price');
             $newData = $this->productRepository->create($data);
             if ($request->get('spec')) {
                 $arrSpecID = explode(',', $request->get('spec'));
@@ -249,6 +251,7 @@ class ProductController extends Controller
             'status_id' => 'required',
             'name' => 'required|string|max:255',
             'price' => 'required|string|max:255',
+            'cost_price' => 'required|string|max:255',
             'description' => 'required',
         ]);
 
@@ -288,6 +291,7 @@ class ProductController extends Controller
                 $arrSpecID = explode(',', $request->get('spec'));
                 $this->createAttributeProduct($arrSpecID, $productTarget);
             }
+            $data['sale_price'] = $request->get('price');
             $newData = $this->productRepository->update($productId, $data);
             return response()->json([
                 'status' => self::SUCCESS_STATUS,

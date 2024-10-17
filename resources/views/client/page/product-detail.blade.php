@@ -216,6 +216,41 @@
                         </a>
                     </div>
                     <p style="padding-top: 30px;">{{ $product->description }}</p>
+
+                    <div class="col-md-12" style="padding-bottom: 30px;">
+                        <!-- Button to open modal -->
+                        <button type="button" class="btn btn-lg btn-block" style="background-color: #01d28e; color: #FFFFFF" data-toggle="modal" data-target="#myModal">
+                            {{__('Nhận Tư Vấn & Xem Xe Trực Tiếp')}}
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">{{__('Điền Thông Tin Liên Hệ')}}</h5>
+                                        <span class="close-icon" data-dismiss="modal" aria-label="Close">&times;</span>
+                                    </div>
+                                    <div class="modal-body" style="display: flow">
+                                        <form>
+                                            <div class="form-group">
+                                                <label for="exampleFormControlInput1">{{__('Tên')}}</label>
+                                                <input type="text" class="form-control" name="name" id="name-info" placeholder="Nguyễn Văn A">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleFormControlInput1">{{__('Số Điện Thoại')}}</label>
+                                                <input type="text" class="form-control" name="phone-number" id="phone-info" placeholder="0999999999">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">{{ __('Đóng') }}</button>
+                                        <button id="send-info" type="button" onclick="submitForm()" class="btn btn-primary">{{ __('Gửi') }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- Chi tiết xe -->
                 <div class="col-md-6">
@@ -544,5 +579,80 @@
                 });
             });
         });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function submitForm() {
+            const name = $('#name-info').val(); // Lấy giá trị từ input Tên
+            const phone = $('#phone-info').val(); // Lấy giá trị từ input Số điện thoại
+            const product_id = {{ $product->id }}; // Lấy giá trị từ product_id
+
+            // Bắt đầu xác thực dữ liệu
+            let isValid = true;
+
+            // Xác thực trường name (Không được để trống và ít nhất 3 ký tự)
+            if (name.trim() === '' || name.length < 3) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Lỗi!',
+                    text: 'Vui lòng nhập tên hợp lệ (ít nhất 3 ký tự).',
+                    confirmButtonText: 'Đóng',
+                    confirmButtonColor: '#ff5b5b'
+                });
+                isValid = false;
+            }
+
+            // Xác thực trường phone (Chỉ chứa số và có 10 ký tự)
+            const phoneRegex = /^[0-9]{10}$/; // Chỉ cho phép 10 số
+            if (!phoneRegex.test(phone)) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Lỗi!',
+                    text: 'Vui lòng nhập số điện thoại hợp lệ (10 số).',
+                    confirmButtonText: 'Đóng',
+                    confirmButtonColor: '#ff5b5b'
+                });
+                isValid = false;
+            }
+
+            // Nếu tất cả các trường đều hợp lệ, tiến hành gửi dữ liệu
+            if (isValid) {
+                $.ajax({
+                    url: '{{ route('api.contact-request') }}', // URL của route mà bạn đã định nghĩa
+                    type: 'POST',
+                    data: {
+                        name: name,
+                        phone: phone,
+                        product_id: product_id,
+                        _token: '{{ csrf_token() }}' // CSRF token để bảo vệ ứng dụng
+                    },
+                    success: function(response) {
+                        // Hiển thị thông báo thành công với SweetAlert2
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Gửi thành công!',
+                            text: 'Thông tin của bạn đã được gửi thành công.',
+                            confirmButtonText: 'Đóng',
+                            confirmButtonColor: '#01d28e'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $('#myModal').modal('hide'); // Đóng modal sau khi người dùng bấm 'Đóng'
+                            }
+                        });
+                    },
+                    error: function(xhr) {
+                        // Thông báo lỗi nếu có
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi!',
+                            text: 'Đã xảy ra lỗi: ' + xhr.responseJSON.message,
+                            confirmButtonText: 'Đóng',
+                            confirmButtonColor: '#ff5b5b'
+                        });
+                    }
+                });
+            }
+        }
     </script>
 @stop

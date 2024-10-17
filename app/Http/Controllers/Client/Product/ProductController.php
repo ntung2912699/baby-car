@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client\Product;
 
 use App\Http\Controllers\Controller;
+use App\Models\ContactRequest;
 use App\Models\Product;
 use App\Models\ProductModel;
 use App\Repositories\Attribute\AttributeRepository;
@@ -19,6 +20,7 @@ class ProductController extends Controller
     const MSG_ERROR_EXCEPTION = 'Đã xảy ra lỗi hệ thống! Vui lòng thử lại sau';
     const SUCCESS_STATUS = 'SUCCESS';
     const ERROR_STATUS = 'ERROR';
+    const CONTACT_STATUS = 'Mới';
 
     /**
      * @var ProductRepository
@@ -312,5 +314,21 @@ class ProductController extends Controller
                 'message' => self::MSG_ERROR_EXCEPTION
             ], 500);
         }
+    }
+
+    public function storeInfo(Request $request) {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:15',
+            'product_id' => 'required'
+        ]);
+
+        $contact = $request->all();
+        $contact['status'] = self::CONTACT_STATUS;
+        $contact['note'] = "";
+
+        ContactRequest::create($contact);
+
+        return response()->json(['message' => 'Thông tin đã được lưu!'], 201);
     }
 }

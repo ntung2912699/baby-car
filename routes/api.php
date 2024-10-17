@@ -53,8 +53,10 @@ Route::middleware('auth:sanctum')->group( function () {
 
     Route::POST('/admin/user/update', [App\Http\Controllers\Admin\User\UserController::class, 'AjaxEditUser'])->name('api.user-update');
     Route::POST('/admin/user/delete', [App\Http\Controllers\Admin\User\UserController::class, 'AjaxDeleteUser'])->name('api.user-delete');
+    Route::post('/contact-update', [\App\Http\Controllers\Admin\AdminController::class, 'updateStatusContact'])->name('api.contact-update');
 });
 
 Route::get('/product-models-client/{producerId}', [\App\Http\Controllers\Client\Product\ProductController::class, 'getProductModels'])->name('model-client.get-by-producer');
 Route::post('/admin/check-token', [\App\Http\Controllers\Admin\AdminController::class, 'checkSessionToken'])->name('api.session-check');
+Route::post('/contact-requests', [\App\Http\Controllers\Client\Product\ProductController::class, 'storeInfo'])->name('api.contact-request');
 

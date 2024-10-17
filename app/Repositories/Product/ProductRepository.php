@@ -13,6 +13,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
      * fix max price use filter
      */
     const MAX_PRICE = 3000000000;
+    const STATUS_SOLD = 6;
 
     public function getModel()
     {
@@ -38,6 +39,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                     ->orWhere('model_id', $modelId)
                     ->orWhere('price', '=', $price);
             })
+            ->where('status_id', '!=', self::STATUS_SOLD)
             ->where('id', '!=', $product->id) // Loại trừ sản phẩm hiện tại
             ->take(3) // Hoặc sử dụng ->limit(3) để giới hạn số lượng kết quả
             ->get();
@@ -55,6 +57,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                 $query->where('producer_id', $producerId);
             })
             ->where('id', '!=', $product->id) // Loại trừ sản phẩm hiện tại
+            ->where('status_id', '!=', self::STATUS_SOLD)
             ->take(3) // Hoặc sử dụng ->limit(3) để giới hạn số lượng kết quả
             ->get();
     }

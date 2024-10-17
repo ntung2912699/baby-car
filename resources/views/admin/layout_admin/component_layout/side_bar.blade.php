@@ -30,9 +30,15 @@
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
                 <li class="nav-item">
+                    <a href="{{ route('admin.index') }}">
+                        <i class="fas fa-crown"></i>
+                        <p>{{ trans('Trang Dashboad') }}</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ url('/') }}">
-                        <i class="fas fa-home"></i>
-                        <p>{{ trans('Trang Chủ Người Dùng') }}</p>
+                        <i class="fas fa-universal-access"></i>
+                        <p>{{ trans('Trang Người Dùng') }}</p>
                     </a>
                 </li>
                 <li class="nav-section">

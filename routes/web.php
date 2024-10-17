@@ -26,25 +26,30 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profile-update', [\App\Http\Controllers\Client\ClientController::class, 'updateUserProfile'])->name('user-profile-update');
     Route::get('/user-profile', [\App\Http\Controllers\Client\ClientController::class, 'userProfile'])->name('user-profile');
     Route::post('/password-update', [\App\Http\Controllers\Client\ClientController::class, 'updateUserPassword'])->name('user-password-update');
+    Route::get('/chat', function () {
+        return view('common.chat');
+    });
 });
 
-Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware([\App\Http\Middleware\TrackVisitor::class])->group(function () {
+    Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // Routes cho đăng nhập bằng Facebook
-Route::get('login/facebook', [\App\Http\Controllers\Auth\LoginController::class, 'redirectToFacebook']);
-Route::get('login/facebook/callback', [\App\Http\Controllers\Auth\LoginController::class, 'handleFacebookCallback']);
+    Route::get('login/facebook', [\App\Http\Controllers\Auth\LoginController::class, 'redirectToFacebook']);
+    Route::get('login/facebook/callback', [\App\Http\Controllers\Auth\LoginController::class, 'handleFacebookCallback']);
 
-Route::get('login/google', [\App\Http\Controllers\Auth\LoginController::class, 'redirectToGoogle'])->name('login.google');
-Route::get('login/google/callback', [\App\Http\Controllers\Auth\LoginController::class, 'handleGoogleCallback']);
+    Route::get('login/google', [\App\Http\Controllers\Auth\LoginController::class, 'redirectToGoogle'])->name('login.google');
+    Route::get('login/google/callback', [\App\Http\Controllers\Auth\LoginController::class, 'handleGoogleCallback']);
 
-Route::post('/verify-otp', [\App\Http\Controllers\Auth\RegisterController::class, 'verifyOtp'])->name('verify-otp');
-Route::get('/verify-otp', [\App\Http\Controllers\Auth\RegisterController::class, 'showOtpForm'])->name('verifyOtp');
-Route::post('/register-verify-otp', [\App\Http\Controllers\Auth\RegisterController::class, 'registerVerifyOtp'])->name('registerVerifyOtp');
-Route::get('/resend-otp', [\App\Http\Controllers\Auth\RegisterController::class, 'resendOtp'])->name('resend-otp');
+    Route::post('/verify-otp', [\App\Http\Controllers\Auth\RegisterController::class, 'verifyOtp'])->name('verify-otp');
+    Route::get('/verify-otp', [\App\Http\Controllers\Auth\RegisterController::class, 'showOtpForm'])->name('verifyOtp');
+    Route::post('/register-verify-otp', [\App\Http\Controllers\Auth\RegisterController::class, 'registerVerifyOtp'])->name('registerVerifyOtp');
+    Route::get('/resend-otp', [\App\Http\Controllers\Auth\RegisterController::class, 'resendOtp'])->name('resend-otp');
 
-Route::get('/product-detail/{id}', [\App\Http\Controllers\Client\Product\ProductController::class, 'detail'])->name('product.detail');
-Route::get('/product-by-producer/{id}', [\App\Http\Controllers\Client\Product\ProductController::class, 'showProductByProducer'])->name('product.by-producer');
-Route::post('/search', [\App\Http\Controllers\Client\Product\ProductController::class, 'search'])->name('search');
-Route::post('/product-search', [\App\Http\Controllers\Client\Product\ProductController::class, 'productSearch'])->name('product.search');
-Route::get('/product-list', [\App\Http\Controllers\Client\Product\ProductController::class, 'productList'])->name('product.list');
-Route::get('/contact', [\App\Http\Controllers\HomeController::class, 'contact'])->name('contact');
+    Route::get('/product-detail/{id}', [\App\Http\Controllers\Client\Product\ProductController::class, 'detail'])->name('product.detail');
+    Route::get('/product-by-producer/{id}', [\App\Http\Controllers\Client\Product\ProductController::class, 'showProductByProducer'])->name('product.by-producer');
+    Route::post('/search', [\App\Http\Controllers\Client\Product\ProductController::class, 'search'])->name('search');
+    Route::post('/product-search', [\App\Http\Controllers\Client\Product\ProductController::class, 'productSearch'])->name('product.search');
+    Route::get('/product-list', [\App\Http\Controllers\Client\Product\ProductController::class, 'productList'])->name('product.list');
+    Route::get('/contact', [\App\Http\Controllers\HomeController::class, 'contact'])->name('contact');
+});

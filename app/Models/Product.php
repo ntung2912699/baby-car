@@ -25,6 +25,8 @@ class Product extends Model
         'status_id',
         'name',
         'price',
+        'cost_price', // Giá nhập
+        'sale_price', // Giá bán
         'thumbnail',
         'gallery',
         'description'
@@ -68,6 +70,14 @@ class Product extends Model
     public function spec()
     {
         return $this->belongsToMany(Attribute_spec::class, 'product_attribute');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function contact()
+    {
+        return $this->hasMany(ContactRequest::class);
     }
 
     public static function boot()

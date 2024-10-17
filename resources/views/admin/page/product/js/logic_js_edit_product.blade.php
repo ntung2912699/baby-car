@@ -13,6 +13,7 @@
         var modelData = $('#modelSelect').val();
         var nameData = $('#name').val();
         var priceData = $('#price').val();
+        var cost_priceData = $('#cost_price').val();
         var thumbnailData = $('#thumbnail-upload').prop('files')[0];
         var galleryData = $('#gallery-upload').prop('files');
         var descriptionData = $('#description').val();
@@ -72,7 +73,16 @@
 
         if (!priceData) {
             $('#price').css('border', '1px solid red');
-            $('#msg-price').append("{{ trans('Giá không được để trống') }}");
+            $('#msg-price').append("{{ trans('Giá Nhập không được để trống') }}");
+            return;
+        }
+
+        $('#cost_price').css('border', '1px solid #ebedf2');
+        $('#msg-cost_price').empty();
+
+        if (!cost_priceData) {
+            $('#cost_price').css('border', '1px solid red');
+            $('#msg-cost_price').append("{{ trans('Giá Nhập không được để trống') }}");
             return;
         }
 
@@ -93,6 +103,7 @@
         form_data.append('status_id', statusData);
         form_data.append('name', nameData);
         form_data.append('price', priceData);
+        form_data.append('cost_price', cost_priceData);
         form_data.append('thumbnail', thumbnailData);
         for (var i = 0; i < galleryData.length; i++) {
             form_data.append('gallery[]', galleryData[i]);
@@ -1286,6 +1297,50 @@
         });
 
         $('#price').on('blur', function() {
+            let inputVal = $(this).val();
+            let numericValue = inputVal.replace(/[^0-9]/g, '');
+
+            if (numericValue.length > 0) {
+                let formattedValue = formatCurrencyVND(Number(numericValue));
+                $(this).val(formattedValue);
+            } else {
+                $(this).val('');
+            }
+        });
+
+        $('#cost_price').on('input', function() {
+            let inputVal = $(this).val();
+
+            // Xóa ký hiệu tiền tệ và dấu phân cách
+            let numericValue = inputVal.replace(/[^0-9]/g, '');
+
+            if (numericValue.length > 0) {
+                // Lấy vị trí con trỏ hiện tại
+                let cursorPosition = this.selectionStart;
+
+                // Định dạng giá trị
+                let formattedValue = formatCurrencyVND(Number(numericValue));
+
+                // Gán giá trị đã định dạng vào input
+                $(this).val(formattedValue);
+
+                // Đặt lại vị trí con trỏ
+                this.setSelectionRange(cursorPosition, cursorPosition);
+            } else {
+                $(this).val('');
+            }
+        });
+
+        $('#cost_price').on('focus', function() {
+            let inputVal = $(this).val();
+            let numericValue = inputVal.replace(/[^0-9]/g, '');
+
+            if (numericValue.length > 0) {
+                $(this).val(numericValue);
+            }
+        });
+
+        $('#cost_price').on('blur', function() {
             let inputVal = $(this).val();
             let numericValue = inputVal.replace(/[^0-9]/g, '');
 
