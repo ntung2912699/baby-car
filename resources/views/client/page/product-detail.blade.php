@@ -171,6 +171,14 @@
             align-items: center; /* Căn giữa theo chiều dọc */
         }
 
+        #caculateBox {
+            padding: 20px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            background-color: #f5f2f2;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Thêm shadow */
+        }
+
     </style>
 
     <section class="ftco-section ftco-car-details">
@@ -217,36 +225,43 @@
                     </div>
                     <p style="padding-top: 30px;">{{ $product->description }}</p>
 
-                    <div class="col-md-12" style="padding-bottom: 30px;">
+                    <div class="row justify-content-center" style="padding-bottom: 30px;">
                         <!-- Button to open modal -->
-                        <button type="button" class="btn btn-lg btn-block" style="background-color: #01d28e; color: #FFFFFF" data-toggle="modal" data-target="#myModal">
-                            {{__('Nhận Tư Vấn & Xem Xe Trực Tiếp')}}
-                        </button>
+                        <div class="col-md-6" style="padding: 5px">
+                            <button type="button" class="btn btn-lg btn-block" style="background-color: #01d28e; color: #FFFFFF" data-toggle="modal" data-target="#myModal">
+                                {{__('Nhận Tư Vấn Chi Tiết')}}
+                            </button>
+                        </div>
+                        <div class="col-md-6" style="padding: 5px">
+                            <button type="button" class="btn btn-lg btn-block" style="background-color: #000000; color: #FFFFFF" data-toggle="modal" data-target="#myModal">
+                                <i class="fa fa-phone"></i>{{__(' 0362912699')}}
+                            </button>
+                        </div>
+                    </div>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">{{__('Điền Thông Tin Liên Hệ')}}</h5>
-                                        <span class="close-icon" data-dismiss="modal" aria-label="Close">&times;</span>
-                                    </div>
-                                    <div class="modal-body" style="display: flow">
-                                        <form>
-                                            <div class="form-group">
-                                                <label for="exampleFormControlInput1">{{__('Tên')}}</label>
-                                                <input type="text" class="form-control" name="name" id="name-info" placeholder="Nguyễn Văn A">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="exampleFormControlInput1">{{__('Số Điện Thoại')}}</label>
-                                                <input type="text" class="form-control" name="phone-number" id="phone-info" placeholder="0999999999">
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">{{ __('Đóng') }}</button>
-                                        <button id="send-info" type="button" onclick="submitForm()" class="btn btn-primary">{{ __('Gửi') }}</button>
-                                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">{{__('Điền Thông Tin Liên Hệ')}}</h5>
+                                    <span class="close-icon" data-dismiss="modal" aria-label="Close">&times;</span>
+                                </div>
+                                <div class="modal-body" style="display: flow">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="exampleFormControlInput1">{{__('Tên')}}</label>
+                                            <input type="text" class="form-control" name="name" id="name-info" placeholder="Nguyễn Văn A">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleFormControlInput1">{{__('Số Điện Thoại')}}</label>
+                                            <input type="text" class="form-control" name="phone-number" id="phone-info" placeholder="0999999999">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">{{ __('Đóng') }}</button>
+                                    <button id="send-info" type="button" onclick="submitForm()" class="btn btn-primary">{{ __('Gửi') }}</button>
                                 </div>
                             </div>
                         </div>
@@ -270,6 +285,110 @@
                                     </div>
                                 </div>
                             @endforeach
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12" id="caculateBox">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 style="color: #1089ff">{{ __('Tổng Chi Phí Ước Tính') }}</h5>
+                            <form id="feeForm">
+                                <div class="form-group">
+                                    <div>
+                                        {{ __('Giá Xe') }} - {{ $product->price }}<br>
+                                        <div id="feeListContainer">
+                                            <!-- Danh sách phí sẽ được append vào đây -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>{{ __('Từ') }}</label>
+                                            <select id="state-1" class="form-control" onchange="caculateFee()">
+                                                <option value="1">{{ __('Hà Nội') }}</option>
+                                                <option value="1">{{ __('HCM') }}</option>
+                                                <option value="2">{{ __('Tỉnh Khác') }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>{{ __('Sang') }}</label>
+                                            <select id="state-2" class="form-control" onchange="caculateFee()">
+                                                <option value="1">{{ __('Hà Nội') }}</option>
+                                                <option value="1">{{ __('HCM') }}</option>
+                                                <option value="2">{{ __('Tỉnh Khác') }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div class="form-group">
+                                <h5>{{ __('Tổng Phí : ') }} <span id="total-fee"></span></h5>
+                            </div>
+                            <p class="text-center" style="color:red; font-size: 12px">{{ __('* Kết Quả Bên Trên Chỉ Mang Tính Chất Tham Khảo ') }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 style="color: #1089ff">{{ __('Ước Tính Lãi Suất Mua Trả Góp') }}</h5>
+                            <form id="feeForm">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <span>{{ __('Giá Xe') }}</span>
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="background-color: #01d28e; color: #FFFFFF"><i class="fa fa-tag"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" onchange="caculateBank()" id="price-total" disabled aria-label="" value="{{ $product->price }}" placeholder="{{ $product->price }}" aria-describedby="inputGroup-sizing-sm">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <span>{{ __('Trả Trước (Triệu)') }}</span>
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="background-color: #01d28e; color: #FFFFFF"><i class="fa fa-tag"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" onchange="caculateBank()" id="prepay" aria-label="" value="{{ number_format((int) str_replace(['.', ' VNĐ'], '', $product->price) / 2, 0, ',', '.') . ' VNĐ' }}" aria-describedby="inputGroup-sizing-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <span>{{ __('Lãi Suất (% Năm)') }}</span>
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="background-color: #01d28e; color: #FFFFFF"><i class="fa fa-piggy-bank"></i></span>
+                                                </div>
+                                                <input type="text" onchange="caculateBank()" class="form-control" id="interest-rate" aria-label="" value="8" aria-describedby="inputGroup-sizing-sm">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <span>{{ __('Thời Hạn (Tháng)') }}</span>
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style="background-color: #01d28e; color: #FFFFFF"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                                <select class="form-control" id="duration" onchange="caculateBank()">
+                                                    <option value="12">12</option>
+                                                    <option value="24">24</option>
+                                                    <option value="48">48</option>
+                                                    <option value="60" selected>60</option>
+                                                    <option value="96">96</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div class="form-group">
+                                <h5>{{ __('Số Tiền Trả Hàng Tháng : ') }} <span id="total-bank"></span></h5>
+                                <h6>{{ __('Số Tiền Gốc Trả Hàng Tháng : ') }} <span id="total-origin"></span></h6>
+                                <h6>{{ __('Số Tiền Lãi Trả Hàng Tháng : ') }} <span id="total-interest"></span></h6>
+                            </div>
+                            <p class="text-center" style="color:red; font-size: 12px">{{ __('* Số Tiền Trả Hàng Tháng Sẽ Giảm Dần Theo Dư Nợ Gốc Từng Năm. Kết Quả Bên Trên Chỉ Mang Tính Chất Tham Khảo ') }}</p>
                         </div>
                     </div>
                 </div>
@@ -654,5 +773,128 @@
                 });
             }
         }
+    </script>
+    <script>
+        $(document).ready(function () {
+            caculateFee();
+            caculateBank();
+        });
+
+        function caculateFee() {
+            // Gửi dữ liệu qua Ajax nếu cần
+            var state1 = $('#state-1').val();
+            var state2 = $('#state-2').val();
+            var fee1 = $('#fee_2').is(':checked') ? $('#fee_2').val() : null;
+            var fee2 = $('#fee_3').is(':checked') ? $('#fee_3').val() : null;
+            var fee3 = $('#fee_4').is(':checked') ? $('#fee_4').val() : null;
+            $.ajax({
+                url: '{{ route('api.calculate-fee') }}',
+                method: 'POST',
+                data: {
+                    product_id: {{ $product->id }},
+                    state1: state1,
+                    state2: state2,
+                    fee1: fee1,
+                    fee2: fee2,
+                    fee3: fee3,
+                },
+                success: function(response) {
+                    $('#feeListContainer').empty(); // Xóa nội dung cũ
+                    $('#total-fee').empty(); // Xóa tổng cũ
+
+                    response.feeList.forEach(function(item) {
+                        // Kiểm tra xem item.id có phải là fee1, fee2 hoặc fee3 không
+                        let isChecked = (response.fee1 == item.id || response.fee2 == item.id || response.fee3 == item.id);
+
+                        // Thêm checkbox và hiển thị phí
+                        $('#feeListContainer').append(`
+                            <input type="checkbox" value="${item.id}" id="fee_${item.id}"
+                                ${item.fee_mode != 0 ? 'disabled checked' : ''} ${isChecked ? 'checked' : ''}
+                                onchange="caculateFee()"/>
+                                ${item.fee_type} - ${item.fee_value}<br>
+                            `);
+                        });
+
+                    // Cập nhật tổng phí
+                    $('#total-fee').append(response.total);
+                }
+            });
+        }
+
+        function caculateBank() {
+            // Gửi dữ liệu qua Ajax nếu cần
+            var priceTotal = $('#price-total').val();
+            var prepay = $('#prepay').val();
+            var interestRate = $('#interest-rate').val();
+            var duration = $('#duration').val();
+            $.ajax({
+                url: '{{ route('api.calculate-bank') }}',
+                method: 'POST',
+                data: {
+                    priceTotal: priceTotal,
+                    prepay: prepay,
+                    interestRate: interestRate,
+                    duration: duration,
+                },
+                success: function(response) {
+                    $('#total-bank').empty(); // Xóa tổng cũ
+                    $('#total-origin').empty(); // Xóa tổng cũ
+                    $('#total-interest').empty(); // Xóa tổng cũ
+
+                    // Cập nhật tổng phí
+                    $('#total-bank').append(response.total);
+                    $('#total-origin').append(response.origin);
+                    $('#total-interest').append(response.interest);
+                }
+            });
+        }
+
+        function formatCurrencyVND(number) {
+            return number.toLocaleString('vi-VN') + " VNĐ";
+        }
+
+        $('#prepay').on('input', function() {
+            let inputVal = $(this).val();
+
+            // Xóa ký hiệu tiền tệ và dấu phân cách
+            let numericValue = inputVal.replace(/[^0-9]/g, '');
+
+            if (numericValue.length > 0) {
+                // Lấy vị trí con trỏ hiện tại
+                let cursorPosition = this.selectionStart;
+
+                // Định dạng giá trị
+                let formattedValue = formatCurrencyVND(Number(numericValue));
+
+                // Gán giá trị đã định dạng vào input
+                $(this).val(formattedValue);
+
+                // Đặt lại vị trí con trỏ
+                this.setSelectionRange(cursorPosition, cursorPosition);
+            } else {
+                $(this).val('');
+            }
+        });
+
+        $('#prepay').on('focus', function() {
+            let inputVal = $(this).val();
+            let numericValue = inputVal.replace(/[^0-9]/g, '');
+
+            if (numericValue.length > 0) {
+                $(this).val(numericValue);
+            }
+        });
+
+        $('#prepay').on('blur', function() {
+            let inputVal = $(this).val();
+            let numericValue = inputVal.replace(/[^0-9]/g, '');
+
+            if (numericValue.length > 0) {
+                let formattedValue = formatCurrencyVND(Number(numericValue));
+                $(this).val(formattedValue);
+            } else {
+                $(this).val('');
+            }
+        });
     </script>
 @stop

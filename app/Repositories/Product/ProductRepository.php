@@ -72,9 +72,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         return $this->model
             ->where('name', 'like', '%' . $query . '%')
-            ->where('status_id', '=', 1)
-            ->orWhere('description', 'like', '%' . $query . '%')
-            ->orWhere('price', 'like', '%' . $query . '%')
+            ->where('status_id', '!=', self::STATUS_SOLD)
             ->orderBy('created_at', 'desc') // Sắp xếp kết quả theo ngày tạo, mới nhất trước
             ->paginate(12);
     }

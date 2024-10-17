@@ -48,7 +48,10 @@ class AppServiceProvider extends ServiceProvider
             \App\Repositories\ProductModel\ProductModelRepository::class,
 
             \App\Repositories\Visitor\VisitorRepositoryInterface::class,
-            \App\Repositories\Visitor\VisitorRepository::class
+            \App\Repositories\Visitor\VisitorRepository::class,
+
+            \App\Repositories\Fee\FeeRepositoryInterface::class,
+            \App\Repositories\Fee\FeeRepository::class
         );
     }
 

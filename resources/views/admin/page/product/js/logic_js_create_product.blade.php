@@ -1203,7 +1203,7 @@
 
     $(document).ready(function() {
         function formatCurrencyVND(number) {
-            return number.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+            return number.toLocaleString('vi-VN') + " VNĐ";
         }
 
         $('#price').on('input', function() {

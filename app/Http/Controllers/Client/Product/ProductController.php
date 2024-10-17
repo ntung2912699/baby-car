@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client\Product;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContactRequest;
+use App\Models\Fee;
 use App\Models\Product;
 use App\Models\ProductModel;
 use App\Repositories\Attribute\AttributeRepository;
@@ -21,6 +22,9 @@ class ProductController extends Controller
     const SUCCESS_STATUS = 'SUCCESS';
     const ERROR_STATUS = 'ERROR';
     const CONTACT_STATUS = 'Mới';
+    const YEAR_MANU = 'Năm SX';
+    const REGISTRATION_FEE = 3;
+    const NO_FEE = 0;
 
     /**
      * @var ProductRepository
@@ -91,15 +95,177 @@ class ProductController extends Controller
             $gallery = explode('|', $product->gallery);
             $relateProduct = $this->productRepository->relateProduct($product);
             $relateProductByProducer = $this->productRepository->relateProductByProducer($product);
+
             return view('client.page.product-detail', compact(
                 'product',
                 'attributeByProduct',
                 'gallery',
                 'relateProduct',
-                'relateProductByProducer'
+                'relateProductByProducer',
             ));
         } catch (\Exception $exception) {
             return view('client.page.not-found');
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    protected function calculateFee(Request $request)
+    {
+        $product = $this->productRepository->find($request->get('product_id'));
+        $state1 = $request->get('state1');
+        $state2 = $request->get('state2');
+        $fee1 = $request->get('fee1');
+        $fee2 = $request->get('fee2');
+        $fee3 = $request->get('fee3');
+        $yearOfManufacture = date("Y");
+
+        // Lấy năm sản xuất từ thuộc tính sản phẩm
+        foreach ($product->spec as $item) {
+            if ($item->attribute->name === self::YEAR_MANU) {
+                $yearOfManufacture = $item->value;
+            }
+        }
+
+        // Kiểm tra và lọc feeList theo state1 và state2
+        if ($state1 == $state2) {
+            $feeList = Fee::query()->where('fee_mode', '!=', 2)->get();
+        } else {
+            if ($state1 > $state2) {
+                $feeList = Fee::query()->where('fee_mode', '!=', 1)->get();
+            } else {
+                $feeList = Fee::query()->where('fee_mode', '!=', 2)->get();
+            }
+        }
+
+        $registration_rate = 0.02; // 2% phí trước bạ
+        $registrationFee = number_format($this->calculateRegistrationFee(
+                (int) str_replace(['.', ' VNĐ'], '', $product->price), $yearOfManufacture, $registration_rate
+            ), 0, ',', '.') . " VNĐ";
+
+        $total = (int) str_replace(['.', ' VNĐ'], '', $product->price); // Khởi tạo tổng
+
+        foreach ($feeList as $item) {
+            if ($item->fee_mode === self::REGISTRATION_FEE) {
+                $item->fee_value = $registrationFee;
+                $feeValueNumeric = (float) str_replace(['.', ' VNĐ'], '', $item->fee_value);
+                $total += $feeValueNumeric;
+            } else if ($item->fee_mode !== self::REGISTRATION_FEE && $item->fee_mode !== self::NO_FEE) {
+                $item->fee_value = number_format($item->fee_value, 0, ',', '.') . " VNĐ";
+                $feeValueNumeric = (float) str_replace(['.', ' VNĐ'], '', $item->fee_value);
+                $total += $feeValueNumeric;
+            } else {
+                if ($fee1 != null && $item->id === intval($fee1)) {
+                    $item->fee_value = number_format($item->fee_value, 0, ',', '.') . " VNĐ";
+                    $feeValueNumeric = (float) str_replace(['.', ' VNĐ'], '', $item->fee_value);
+                    $total += $feeValueNumeric;
+                } else if ($fee2 != null && $item->id === intval($fee2)) {
+                    $item->fee_value = number_format($item->fee_value, 0, ',', '.') . " VNĐ";
+                    $feeValueNumeric = (float) str_replace(['.', ' VNĐ'], '', $item->fee_value);
+                    $total += $feeValueNumeric;
+                } else if ($fee3 != null && $item->id === intval($fee3)) {
+                    $item->fee_value = number_format($item->fee_value, 0, ',', '.') . " VNĐ";
+                    $feeValueNumeric = (float) str_replace(['.', ' VNĐ'], '', $item->fee_value);
+                    $total += $feeValueNumeric;
+                } else {
+                    $item->fee_value = number_format($item->fee_value, 0, ',', '.') . " VNĐ";
+                }
+            }
+        }
+
+        // Định dạng tổng giá trị
+        $totalFormatted = number_format($total, 0, ',', '.') . " VNĐ";
+
+        return response()->json([
+            'feeList' => $feeList,
+            'total' => $totalFormatted,
+            'fee1' => $fee1,
+            'fee2' => $fee2,
+            'fee3' => $fee3,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    protected function calculateBank(Request $request)
+    {
+        // Lấy các giá trị đầu vào từ request
+        $priceTotal = (int) str_replace(['.', ' VNĐ'], '', $request->get('priceTotal')); // Tổng giá trị sản phẩm
+        $prepay = ((int) str_replace(['.', ' VNĐ'], '',  $request->get('prepay')) / $priceTotal) * 100; // Phần trăm trả trước
+        $interestRate = (float) $request->get('interestRate'); // Lãi suất năm (phần trăm)
+        $duration = (int) $request->get('duration'); // Thời hạn vay (số tháng)
+
+        // Tính toán
+        $prepayAmount = ($priceTotal * $prepay) / 100; // Số tiền trả trước
+        $loanAmount = ($priceTotal - $prepayAmount) / $duration; // Số tiền gốc vay
+
+        // Lãi suất hàng tháng
+        $monthlyInterestRate = $interestRate / 12;
+
+        // Tiền lãi hàng tháng (trả góp theo dư nợ giảm dần)
+        $interest = $loanAmount * $monthlyInterestRate;
+
+        // Tổng số tiền trả mỗi tháng
+        $monthlyPayment = $loanAmount + $interest;
+
+        // Trả về kết quả
+        return response()->json([
+            'total' => number_format($monthlyPayment, 0, ',', '.') . ' VNĐ', // Số tiền phải trả mỗi tháng
+            'origin' => number_format($loanAmount, 0, ',', '.') . ' VNĐ', // Số tiền gốc vay
+            'interest' => number_format($interest, 0, ',', '.') . ' VNĐ', // Số tiền lãi hàng tháng
+        ]);
+    }
+
+    /**
+     * @param $car_price
+     * @param $manufacture_year
+     * @param float $registration_rate
+     * @return float|int
+     */
+    protected function calculateRegistrationFee($car_price, $manufacture_year, $registration_rate = 0.02) {
+        // Tính tuổi xe
+        $car_age = $this->calculateCarAge($manufacture_year);
+
+        // Tính tỷ lệ khấu hao dựa trên tuổi xe
+        $depreciation_rate = $this->getDepreciationRate($car_age);
+
+        // Tính giá trị còn lại của xe
+        $remaining_value = $car_price * $depreciation_rate;
+
+        // Tính phí trước bạ
+        $registration_fee = $remaining_value * $registration_rate;
+
+        return $registration_fee;
+    }
+
+    /**
+     * @param $manufacture_year
+     * @return string
+     */
+    protected function calculateCarAge($manufacture_year) {
+        $current_year = date("Y"); // Năm hiện tại
+        return $current_year - $manufacture_year;
+    }
+
+    /**
+     * @param $car_age
+     * @return float
+     */
+    protected function getDepreciationRate($car_age) {
+        if ($car_age < 1) {
+            return 0.90; // 90% giá trị
+        } elseif ($car_age >= 1 && $car_age < 3) {
+            return 0.70; // 70% giá trị
+        } elseif ($car_age >= 3 && $car_age < 6) {
+            return 0.50; // 50% giá trị
+        } elseif ($car_age >= 6 && $car_age < 10) {
+            return 0.30; // 30% giá trị
+        } else {
+            return 0.20; // 20% giá trị
         }
     }
 

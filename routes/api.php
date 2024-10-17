@@ -59,4 +59,6 @@ Route::middleware('auth:sanctum')->group( function () {
 Route::get('/product-models-client/{producerId}', [\App\Http\Controllers\Client\Product\ProductController::class, 'getProductModels'])->name('model-client.get-by-producer');
 Route::post('/admin/check-token', [\App\Http\Controllers\Admin\AdminController::class, 'checkSessionToken'])->name('api.session-check');
 Route::post('/contact-requests', [\App\Http\Controllers\Client\Product\ProductController::class, 'storeInfo'])->name('api.contact-request');
+Route::post('/calculate-fee', [\App\Http\Controllers\Client\Product\ProductController::class, 'calculateFee'])->name('api.calculate-fee');
+Route::post('/calculate-bank', [\App\Http\Controllers\Client\Product\ProductController::class, 'calculateBank'])->name('api.calculate-bank');
 
