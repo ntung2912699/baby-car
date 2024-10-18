@@ -58,7 +58,7 @@
                 <div class="card-header text-center">
                     {{ __('Xin Chào ') }} {{ $user->name }}!
                     <br>
-                    {{ __('Mật khẩu tài khoản NiceCar của bạn vừa được thay đổi thành công') }}
+                    {{ __('Mật khẩu tài khoản Auto99 của bạn vừa được thay đổi thành công') }}
                 </div>
                 <div class="card-body text-center">
                     <p>{{ __('Mật khẩu của bạn đã được thiết lập lại thành công vào : ') }} {{ $datetime }}.</p>

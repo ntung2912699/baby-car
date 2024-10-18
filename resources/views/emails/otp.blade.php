@@ -58,7 +58,7 @@
                 <div class="card-header text-center">
                     Xin Chào {{ $name }}!
                     <br>
-                    Bạn đang thực hiện đăng ký tài khoản người dùng tại Nice Car.
+                    Bạn đang thực hiện đăng ký tài khoản người dùng tại Auto99.
                     <br>
                     Vui lòng nhập mã OTP bên dưới vào form xác nhận để hoàn tất đăng ký tài khoản của bạn.
                 </div>
@@ -72,7 +72,7 @@
                     <br>
                     Cảm ơn!
                     <br>
-                    Để biết thêm thông tin chi tiết truy cập tại <a href="{{ $url }}">NiceCar</a>
+                    Để biết thêm thông tin chi tiết truy cập tại <a href="{{ $url }}">Auto99</a>
                 </div>
             </div>
         </div>

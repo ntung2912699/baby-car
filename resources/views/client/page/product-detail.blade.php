@@ -175,7 +175,7 @@
             padding: 20px;
             margin-bottom: 10px;
             border-radius: 10px;
-            background-color: #f5f2f2;
+            /*background-color: #f5f2f2;*/
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Thêm shadow */
         }
 

@@ -289,28 +289,6 @@
                                             </thead>
                                             <tbody>
                                             @foreach( $productNew as $product)
-<<<<<<< Updated upstream
-                                                <a href="{{ route('product-form.edit', ['id' => $product->id ]) }}">
-                                                    <tr role="row" class="odd">
-                                                        <td class="text-start">{{ $product->id }}</td>
-                                                        <td class="text-start">{{ $product->category->name }}</td>
-                                                        <td class="text-start">{{ $product->producer->name }}</td>
-                                                        <td class="text-start">{{ $product->model->name }}</td>
-                                                        <td class="text-start">{{ $product->status->name }}</td>
-                                                        <td class="text-start">
-                                                            <div class="avatar">
-                                                                <img src="{{ asset($product->thumbnail) }}" alt="..." class="avatar-img rounded-circle">
-                                                            </div>
-                                                            <a  href="{{ route('product-form.edit', ['id' => $product->id ]) }}">
-                                                                {{ $product->name }}
-                                                            </a>
-                                                        </td>
-                                                        <td class="text-start">{{ $product->price }}</td>
-                                                        <td class="text-start">{{ $product->created_at }}</td>
-                                                        <td class="text-start">{{ $product->updated_at }}</td>
-                                                    </tr>
-                                                </a>
-=======
                                                 <tr role="row" class="odd">
                                                     <td class="text-start">{{ $product->id }}</td>
                                                     <td class="text-start">{{ $product->category->name }}</td>
@@ -333,7 +311,6 @@
                                                     <td class="text-start">{{ $product->created_at }}</td>
                                                     <td class="text-start">{{ $product->updated_at }}</td>
                                                 </tr>
->>>>>>> Stashed changes
                                             @endforeach
                                             </tbody>
                                         </table>

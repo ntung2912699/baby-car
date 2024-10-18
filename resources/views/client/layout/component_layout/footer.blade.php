@@ -3,7 +3,7 @@
         <div class="row mb-5">
             <div class="col-md">
                 <div class="ftco-footer-widget mb-6">
-                    <h2 class="ftco-heading-2"><a href="#" class="logo">Nice<span>Car</span></a></h2>
+                    <h2 class="ftco-heading-2"><a href="#" class="logo">Auto<span>99</span></a></h2>
                     <p>Hỗ Trợ, Mua Bán Trao Đổi Xe Oto Cũ Mới Toàn Quốc.</p>
                     <p>Uy Tín, Trách Nhiệm Là Tiêu Chí Cốt Lõi.</p>
                     <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">

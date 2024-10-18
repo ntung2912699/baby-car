@@ -9,7 +9,7 @@
 {{--                    class="navbar-brand"--}}
 {{--                    height="20"--}}
 {{--                />--}}
-                <h1 class="navbar-brand" style="color: #FFFFFF"><img src="{{ asset('assets/img/kaiadmin/favicon.ico') }}"/> NICE CAR ADMIN</h1>
+                <h1 class="navbar-brand" style="color: #FFFFFF"><img src="{{ asset('assets/img/kaiadmin/favicon.ico') }}"/> AUTO99 ADMIN</h1>
             </a>
             <div class="nav-toggle">
                 <button class="btn btn-toggle toggle-sidebar">
